@@ -3,25 +3,337 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Parlak Clean - Müşteri Takip</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#222}
-.container{max-width:1000px;margin:auto;padding:20px}
-h1{text-align:center;margin-bottom:5px}
-.subtitle{text-align:center;color:#777;margin-bottom:20px}
-.card{background:#fff;padding:20px;margin-bottom:20px;border-radius:15px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-input,textarea,select,button{width:100%;padding:12px;margin-top:8px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;font-size:16px}
-textarea{min-height:90px}
-button{background:#1677ff;color:white;border:0;font-weight:bold;cursor:pointer}
-.logout{background:#555}
-.hidden{display:none}
-.customer{border:1px solid #ddd;border-radius:12px;padding:15px;margin-top:12px}
-.status{display:inline-block;padding:6px 10px;border-radius:20px;background:#eee;margin-top:5px}
-.message{padding:10px;border-radius:8px;margin-bottom:10px}
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+button,input,textarea,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:18px;
+}
+
+/* ÜST ALAN */
+
+.header{
+    background:linear-gradient(135deg,#1677ff,#0757c9);
+    color:white;
+    padding:24px;
+    border-radius:22px;
+    margin-bottom:18px;
+    box-shadow:0 8px 25px rgba(22,119,255,.25);
+}
+
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.subtitle{
+    opacity:.85;
+    margin-top:5px;
+}
+
+.logout{
+    background:rgba(255,255,255,.18);
+    color:white;
+    border:1px solid rgba(255,255,255,.35);
+    padding:10px 14px;
+    border-radius:10px;
+}
+
+/* ÖZET */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.stat{
+    background:white;
+    border-radius:17px;
+    padding:17px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.stat-icon{
+    font-size:25px;
+}
+
+.stat-title{
+    color:#777;
+    font-size:13px;
+    margin-top:7px;
+}
+
+.stat-value{
+    font-size:22px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+/* BUTON */
+
+.add-button{
+    width:100%;
+    border:0;
+    background:#1677ff;
+    color:white;
+    padding:16px;
+    border-radius:15px;
+    font-weight:bold;
+    font-size:17px;
+    margin-bottom:18px;
+    box-shadow:0 6px 18px rgba(22,119,255,.25);
+}
+
+/* KART */
+
+.card{
+    background:white;
+    padding:20px;
+    margin-bottom:18px;
+    border-radius:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.card h2{
+    margin-top:0;
+}
+
+/* FORM */
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:13px;
+    margin-top:7px;
+    margin-bottom:13px;
+    border:1px solid #d8dee8;
+    border-radius:10px;
+    background:#fff;
+    outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:#1677ff;
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+label{
+    font-size:13px;
+    font-weight:bold;
+    color:#555;
+}
+
+.save-button{
+    width:100%;
+    border:0;
+    background:#16a05d;
+    color:white;
+    padding:14px;
+    border-radius:11px;
+    font-weight:bold;
+}
+
+.cancel-button{
+    width:100%;
+    border:0;
+    background:#eef1f5;
+    color:#333;
+    padding:13px;
+    border-radius:11px;
+    margin-top:8px;
+}
+
+/* ARAMA */
+
+.search{
+    position:relative;
+}
+
+.search input{
+    padding-left:42px;
+    font-size:16px;
+}
+
+.search-icon{
+    position:absolute;
+    left:14px;
+    top:20px;
+    font-size:18px;
+}
+
+/* MÜŞTERİ */
+
+.customer{
+    border:1px solid #e1e6ee;
+    border-radius:15px;
+    padding:16px;
+    margin-top:12px;
+}
+
+.customer-header{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:flex-start;
+}
+
+.customer-name{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.customer-phone{
+    color:#1677ff;
+    margin-top:6px;
+}
+
+.customer-info{
+    color:#555;
+    margin-top:10px;
+    line-height:1.6;
+}
+
+.badge{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    background:#eef2f7;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:14px;
+}
+
+.action{
+    border:0;
+    padding:10px;
+    border-radius:9px;
+    background:#eef4ff;
+    color:#1677ff;
+    font-weight:bold;
+}
+
+.action.whatsapp{
+    background:#e9f9f0;
+    color:#119451;
+}
+
+.action.delete{
+    background:#fff0f0;
+    color:#d33;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.message{
+    padding:11px;
+    margin-top:10px;
+    border-radius:9px;
+}
+
+.success{
+    background:#e9f9f0;
+    color:#08763e;
+}
+
+.error{
+    background:#fff0f0;
+    color:#b00020;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:30px 10px;
+}
+
+/* MOBİL */
+
+@media(max-width:750px){
+
+    .container{
+        padding:12px;
+    }
+
+    .header{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .header-top{
+        align-items:flex-start;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .actions{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+}
+
+@media(max-width:430px){
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    .customer-header{
+        flex-direction:column;
+    }
+}
 </style>
 </head>
 
@@ -29,129 +341,149 @@ button{background:#1677ff;color:white;border:0;font-weight:bold;cursor:pointer}
 
 <div class="container">
 
-<h1>🧼 Parlak Clean</h1>
-<div class="subtitle">Halı & Koltuk Yıkama Müşteri Takip</div>
-<div id="resetBox" class="card hidden">
-    <h2>🔐 Yeni Şifre Belirle</h2>
+<!-- ANA BAŞLIK -->
 
-    <input id="newPassword" type="password" placeholder="Yeni şifre">
+<div class="header">
 
-    <input id="newPassword2" type="password" placeholder="Yeni şifre tekrar">
+    <div class="header-top">
 
-    <button onclick="yeniSifreBelirle()">Şifreyi Kaydet</button>
+        <div>
+            <div class="logo">🧼 PARLAK CLEAN</div>
+            <div class="subtitle">Halı & Koltuk Yıkama</div>
+        </div>
 
-    <div id="resetMessage"></div>
+        <button class="logout" onclick="logout()">
+            Çıkış
+        </button>
+
+    </div>
+
 </div>
 
-<div id="loginBox" class="card">
-<h2>🔐 Giriş Yap</h2>
 
-<input id="email" type="email" placeholder="E-posta">
-<input id="password" type="password" placeholder="Şifre">
+<!-- ÖZET -->
 
-<button onclick="login()">Giriş Yap</button>
+<div class="stats">
 
-<div id="loginMessage"></div>
+    <div class="stat">
+        <div class="stat-icon">👥</div>
+        <div class="stat-title">Toplam Müşteri</div>
+        <div class="stat-value" id="toplamMusteri">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-icon">🧼</div>
+        <div class="stat-title">Toplam M²</div>
+        <div class="stat-value" id="toplamM2">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-icon">💰</div>
+        <div class="stat-title">Toplam Tutar</div>
+        <div class="stat-value" id="toplamTutar">0 TL</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-title">Bekleyen Ödeme</div>
+        <div class="stat-value" id="bekleyenOdeme">0 TL</div>
+    </div>
+
 </div>
+
+
+<!-- MÜŞTERİ EKLE BUTONU -->
+
+<button class="add-button" onclick="formAc()">
+    ➕ Yeni Müşteri Ekle
+</button>
+
+
+<!-- MÜŞTERİ FORMU -->
+
+<div id="formBox" class="card hidden">
+
+    <h2 id="formBaslik">➕ Yeni Müşteri</h2>
+
+    <input id="adSoyad" type="text" placeholder="Ad Soyad">
+
+    <input id="telefon" type="tel" placeholder="Telefon">
+
+    <textarea id="adres" placeholder="Adres"></textarea>
+
+    <label>Alım Tarihi</label>
+    <input id="alimTarihi" type="date">
+
+    <label>Teslim Tarihi</label>
+    <input id="teslimTarihi" type="date">
+
+    <input id="haliM2" type="number" step="0.1" placeholder="Halı M²">
+
+    <input id="tutar" type="number" step="0.01" placeholder="Tutar (TL)">
+
+    <label>İş Durumu</label>
+
+    <select id="isDurumu">
+        <option value="Alınacak">Alınacak</option>
+        <option value="Yıkamada">Yıkamada</option>
+        <option value="Hazır">Hazır</option>
+        <option value="Teslim Edildi">Teslim Edildi</option>
+    </select>
+
+    <label>Ödeme Durumu</label>
+
+    <select id="odemeDurumu">
+        <option value="Ödenmedi">Ödenmedi</option>
+        <option value="Kapora">Kapora</option>
+        <option value="Ödendi">Ödendi</option>
+    </select>
+
+    <textarea id="notlar" placeholder="Notlar"></textarea>
+
+    <button class="save-button" onclick="musteriKaydet()">
+        💾 Müşteriyi Kaydet
+    </button>
+
+    <button class="cancel-button" onclick="formKapat()">
+        Vazgeç
+    </button>
+
+    <div id="saveMessage"></div>
+
+</div>
+
+
+<!-- MÜŞTERİLER -->
 
 <div class="card">
-    <h2>🔐 Şifre Değiştir</h2>
 
-    <input id="yeniSifre" type="password" placeholder="Yeni şifre">
+    <h2>👥 Müşteriler</h2>
 
-    <input id="yeniSifreTekrar" type="password" placeholder="Yeni şifre tekrar">
+    <div class="search">
 
-    <button onclick="sifreDegistir()">Şifreyi Kaydet</button>
+        <div class="search-icon">🔎</div>
 
-    <div id="sifreMessage"></div>
-</div>
-<div id="app" class="hidden">
+        <input
+            id="arama"
+            type="text"
+            placeholder="Müşteri adı veya telefon ara..."
+            oninput="musterileriGetir()"
+        >
 
-<div class="card">
-<button class="logout" onclick="logout()">Çıkış Yap</button>
+    </div>
 
-<h2>➕ Müşteri Ekle</h2>
-
-<input id="adSoyad" type="text" placeholder="Ad Soyad">
-<input id="telefon" type="tel" placeholder="Telefon">
-<textarea id="adres" placeholder="Adres"></textarea>
-
-<label>Alım Tarihi</label>
-<input id="alimTarihi" type="date">
-
-<label>Teslim Tarihi</label>
-<input id="teslimTarihi" type="date">
-
-<input id="haliM2" type="number" step="0.1" placeholder="Halı M²">
-<input id="tutar" type="number" step="0.01" placeholder="Tutar (TL)">
-
-<select id="odemeDurumu">
-<option value="Ödenmedi">Ödenmedi</option>
-<option value="Kapora">Kapora</option>
-<option value="Ödendi">Ödendi</option>
-</select>
-
-<textarea id="notlar" placeholder="Notlar"></textarea>
-
-<button onclick="musteriKaydet()">💾 Müşteriyi Kaydet</button>
-
-<div id="saveMessage"></div>
-</div>
-
-
-<div class="card">
-
-<h2>👥 Müşteriler</h2>
-
-<input id="arama" type="text"
-placeholder="🔎 Müşteri adı veya telefon ara..."
-oninput="musterileriGetir()">
-
-<div id="musteriListesi">Yükleniyor...</div>
+    <div id="musteriListesi">
+        Yükleniyor...
+    </div>
 
 </div>
 
 </div>
-</div>
 
-async function sifreDegistir(){
 
-    const sifre =
-        document.getElementById("yeniSifre").value;
-
-    const tekrar =
-        document.getElementById("yeniSifreTekrar").value;
-
-    const message =
-        document.getElementById("sifreMessage");
-
-    if(sifre.length < 6){
-        message.innerHTML =
-            "⚠️ Şifre en az 6 karakter olmalı.";
-        return;
-    }
-
-    if(sifre !== tekrar){
-        message.innerHTML =
-            "⚠️ Şifreler aynı değil.";
-        return;
-    }
-
-    const { error } =
-        await client.auth.updateUser({
-            password: sifre
-        });
-
-    if(error){
-        message.innerHTML =
-            "❌ Şifre değiştirilemedi: " + error.message;
-        return;
-    }
-
-    message.innerHTML =
-        "✅ Şifre başarıyla değiştirildi!";
-}
 <script>
+
+/* SUPABASE */
 
 const SUPABASE_URL =
 "https://ynbcnhsipsktgrnqidfa.supabase.co";
@@ -161,334 +493,548 @@ const SUPABASE_KEY =
 
 const client =
 window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+    SUPABASE_URL,
+    SUPABASE_KEY
 );
+
+
+/* GİRİŞ */
 
 async function login(){
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const message = document.getElementById("loginMessage");
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const message =
+        document.getElementById("loginMessage");
 
     if(!email || !password){
-        message.innerHTML = "⚠️ E-posta ve şifre gir.";
+
+        message.innerHTML =
+            "⚠️ E-posta ve şifre gir.";
+
         return;
     }
 
-    message.innerHTML = "⏳ Giriş yapılıyor...";
+    message.innerHTML =
+        "⏳ Giriş yapılıyor...";
 
-    const result = await client.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
+    const result =
+        await client.auth.signInWithPassword({
+            email:email,
+            password:password
+        });
 
     if(result.error){
+
         message.innerHTML =
-            "❌ Giriş başarısız: " + result.error.message;
+            "❌ Giriş başarısız: " +
+            result.error.message;
+
         return;
     }
-
-    message.innerHTML = "✅ Giriş başarılı!";
 
     await uygulamayiAc();
 }
 
 
-async function oturumKontrol(){
-
-const {data} =
-await client.auth.getSession();
-
-if(data.session){
-
-uygulamayiAc();
-
-}
-
-}
-
-
-async function uygulamayiAc(){
-
-document.getElementById("loginBox")
-.classList.add("hidden");
-
-document.getElementById("app")
-.classList.remove("hidden");
-
-await musterileriGetir();
-
-}
-
-
-async function logout(){
-
-await client.auth.signOut();
-
-location.reload();
-
-}
-
-
-async function musteriKaydet(){
-
-const {data:{user}} =
-await client.auth.getUser();
-
-if(!user){
-
-alert("Önce giriş yapmalısın.");
-
-return;
-}
-
-
-const kayit={
-
-ad_soyad:
-document.getElementById("adSoyad").value.trim(),
-
-telefon:
-document.getElementById("telefon").value.trim(),
-
-adres:
-document.getElementById("adres").value.trim(),
-
-alim_tarihi:
-document.getElementById("alimTarihi").value || null,
-
-teslim_tarihi:
-document.getElementById("teslimTarihi").value || null,
-
-hali_m2:
-document.getElementById("haliM2").value
-? Number(document.getElementById("haliM2").value)
-: null,
-
-tutar:
-document.getElementById("tutar").value
-? Number(document.getElementById("tutar").value)
-: null,
-
-odeme_durumu:
-document.getElementById("odemeDurumu").value,
-
-notlar:
-document.getElementById("notlar").value.trim(),
-
-user_id:user.id
-
-};
-
-
-if(!kayit.ad_soyad || !kayit.telefon){
-
-document.getElementById("saveMessage").innerHTML =
-"⚠️ Ad soyad ve telefon gerekli.";
-
-return;
-}
-
-
-const {error} =
-await client
-.from("Müşteriler")
-.insert([kayit]);
-
-
-if(error){
-
-document.getElementById("saveMessage").innerHTML =
-"❌ Kayıt hatası: "+error.message;
-
-return;
-
-}
-
-
-document.getElementById("saveMessage").innerHTML =
-"✅ Müşteri başarıyla kaydedildi!";
-
-
-document.getElementById("adSoyad").value="";
-document.getElementById("telefon").value="";
-document.getElementById("adres").value="";
-document.getElementById("alimTarihi").value="";
-document.getElementById("teslimTarihi").value="";
-document.getElementById("haliM2").value="";
-document.getElementById("tutar").value="";
-document.getElementById("notlar").value="";
-
-await musterileriGetir();
-
-}
-
-
-async function musterileriGetir(){
-
-const {data:{user}} =
-await client.auth.getUser();
-
-if(!user)return;
-
-
-const arama =
-document.getElementById("arama")?.value
-.trim()
-.toLowerCase() || "";
-
-
-const {data,error} =
-await client
-.from("Müşteriler")
-.select("*")
-.eq("user_id",user.id)
-.order("created_at",{ascending:false});
-
-
-if(error){
-
-document.getElementById("musteriListesi").innerHTML =
-"❌ Müşteriler alınamadı: "+error.message;
-
-return;
-}
-
-
-let liste=data||[];
-
-
-if(arama){
-
-liste=liste.filter(m=>
-(m.ad_soyad||"").toLowerCase().includes(arama) ||
-(m.telefon||"").toLowerCase().includes(arama)
-);
-
-}
-
-
-if(liste.length===0){
-
-document.getElementById("musteriListesi").innerHTML =
-"Henüz müşteri kaydı yok.";
-
-return;
-}
-
-
-document.getElementById("musteriListesi").innerHTML =
-liste.map(m=>`
-
-<div class="customer">
-
-<strong>${guvenli(m.ad_soyad)}</strong>
-
-<div>📞 ${guvenli(m.telefon)}</div>
-
-<div>📍 ${guvenli(m.adres||"-")}</div>
-
-<div>📅 Alım: ${guvenli(m.alim_tarihi||"-")}</div>
-
-<div>🚚 Teslim: ${guvenli(m.teslim_tarihi||"-")}</div>
-
-<div>🧼 ${m.hali_m2??"-"} m²</div>
-
-<div>💰 ${m.tutar??"-"} TL</div>
-
-<div class="status">
-${guvenli(m.odeme_durumu||"-")}
-</div>
-
-<div>📝 ${guvenli(m.notlar||"-")}</div>
-
-</div>
-
-`).join("");
-
-}
-
-
-function guvenli(text){
-
-return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-async function yeniSifreBelirle(){
-
-    const password =
-        document.getElementById("newPassword").value;
-
-    const password2 =
-        document.getElementById("newPassword2").value;
-
-    const message =
-        document.getElementById("resetMessage");
-
-    if(password.length < 6){
-        message.innerHTML =
-            "⚠️ Şifre en az 6 karakter olmalı.";
-        return;
-    }
-
-    if(password !== password2){
-        message.innerHTML =
-            "⚠️ Şifreler aynı değil.";
-        return;
-    }
-
-    const { error } =
-        await client.auth.updateUser({
-            password: password
-        });
-
-    if(error){
-        message.innerHTML =
-            "❌ Şifre değiştirilemedi: " + error.message;
-        return;
-    }
-
-    message.innerHTML =
-        "✅ Şifren başarıyla değiştirildi!";
-
-    document.getElementById("newPassword").value = "";
-    document.getElementById("newPassword2").value = "";
-
-    setTimeout(() => {
-        uygulamayiAc();
-    }, 1000);
-}
+/* OTURUM */
 
 async function oturumKontrol(){
 
     const {data} =
         await client.auth.getSession();
 
-    const hash =
-        window.location.hash;
+    if(data.session){
 
-    if(hash.includes("type=recovery")){
+        await uygulamayiAc();
 
-        document.getElementById("loginBox")
-            .classList.add("hidden");
+    }
 
-        document.getElementById("resetBox")
-            .classList.remove("hidden");
+}
+
+
+/* UYGULAMA */
+
+async function uygulamayiAc(){
+
+    await musterileriGetir();
+
+}
+
+
+/* ÇIKIŞ */
+
+async function logout(){
+
+    await client.auth.signOut();
+
+    location.reload();
+
+}
+
+
+/* FORM AÇ */
+
+function formAc(){
+
+    document
+        .getElementById("formBox")
+        .classList.remove("hidden");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* FORM KAPAT */
+
+function formKapat(){
+
+    document
+        .getElementById("formBox")
+        .classList.add("hidden");
+
+    formTemizle();
+
+}
+
+
+/* FORM TEMİZLE */
+
+function formTemizle(){
+
+    document.getElementById("adSoyad").value="";
+    document.getElementById("telefon").value="";
+    document.getElementById("adres").value="";
+    document.getElementById("alimTarihi").value="";
+    document.getElementById("teslimTarihi").value="";
+    document.getElementById("haliM2").value="";
+    document.getElementById("tutar").value="";
+    document.getElementById("isDurumu").value="Alınacak";
+    document.getElementById("odemeDurumu").value="Ödenmedi";
+    document.getElementById("notlar").value="";
+    document.getElementById("saveMessage").innerHTML="";
+
+}
+
+
+/* MÜŞTERİ KAYDET */
+
+async function musteriKaydet(){
+
+    const {data:{user}} =
+        await client.auth.getUser();
+
+    if(!user){
+
+        alert("Önce giriş yapmalısın.");
 
         return;
     }
 
-    if(data.session){
-        uygulamayiAc();
+
+    const kayit = {
+
+        ad_soyad:
+            document.getElementById("adSoyad").value.trim(),
+
+        telefon:
+            document.getElementById("telefon").value.trim(),
+
+        adres:
+            document.getElementById("adres").value.trim(),
+
+        alim_tarihi:
+            document.getElementById("alimTarihi").value || null,
+
+        teslim_tarihi:
+            document.getElementById("teslimTarihi").value || null,
+
+        hali_m2:
+            document.getElementById("haliM2").value
+            ? Number(document.getElementById("haliM2").value)
+            : null,
+
+        tutar:
+            document.getElementById("tutar").value
+            ? Number(document.getElementById("tutar").value)
+            : null,
+
+        odeme_durumu:
+            document.getElementById("odemeDurumu").value,
+
+        notlar:
+            document.getElementById("notlar").value.trim(),
+
+        user_id:
+            user.id
+
+    };
+
+
+    if(!kayit.ad_soyad || !kayit.telefon){
+
+        document.getElementById("saveMessage").innerHTML =
+            '<div class="message error">⚠️ Ad soyad ve telefon gerekli.</div>';
+
+        return;
     }
+
+
+    /*
+       Not:
+       İş durumu sütunun mevcut tabloda yoksa
+       Supabase hata verebilir.
+       Bu yüzden önce mevcut yapıyla kayıt yapıyoruz.
+    */
+
+    const {error} =
+        await client
+        .from("Müşteriler")
+        .insert([kayit]);
+
+
+    if(error){
+
+        document.getElementById("saveMessage").innerHTML =
+            '<div class="message error">❌ Kayıt hatası: ' +
+            guvenli(error.message) +
+            '</div>';
+
+        return;
+    }
+
+
+    document.getElementById("saveMessage").innerHTML =
+        '<div class="message success">✅ Müşteri başarıyla kaydedildi!</div>';
+
+
+    formTemizle();
+
+    await musterileriGetir();
+
 }
+
+
+/* MÜŞTERİLERİ GETİR */
+
+async function musterileriGetir(){
+
+    const {data:{user}} =
+        await client.auth.getUser();
+
+    if(!user){
+
+        document.getElementById("musteriListesi").innerHTML =
+            '<div class="empty">Giriş yapmanız gerekiyor.</div>';
+
+        return;
+    }
+
+
+    const arama =
+        document
+        .getElementById("arama")
+        ?.value
+        .trim()
+        .toLowerCase() || "";
+
+
+    const {data,error} =
+        await client
+        .from("Müşteriler")
+        .select("*")
+        .eq("user_id",user.id)
+        .order("created_at",{ascending:false});
+
+
+    if(error){
+
+        document.getElementById("musteriListesi").innerHTML =
+            '<div class="message error">❌ Müşteriler alınamadı: ' +
+            guvenli(error.message) +
+            '</div>';
+
+        return;
+    }
+
+
+    let liste =
+        data || [];
+
+
+    if(arama){
+
+        liste =
+            liste.filter(m =>
+
+                (m.ad_soyad || "")
+                .toLowerCase()
+                .includes(arama)
+
+                ||
+
+                (m.telefon || "")
+                .toLowerCase()
+                .includes(arama)
+
+            );
+
+    }
+
+
+    /* ÖZETLER */
+
+    const toplamMusteri =
+        data?.length || 0;
+
+    const toplamM2 =
+        (data || [])
+        .reduce(
+            (toplam,m) =>
+                toplam + Number(m.hali_m2 || 0),
+            0
+        );
+
+    const toplamTutar =
+        (data || [])
+        .reduce(
+            (toplam,m) =>
+                toplam + Number(m.tutar || 0),
+            0
+        );
+
+    const bekleyenOdeme =
+        (data || [])
+        .filter(m =>
+            m.odeme_durumu !== "Ödendi"
+        )
+        .reduce(
+            (toplam,m) =>
+                toplam + Number(m.tutar || 0),
+            0
+        );
+
+
+    document.getElementById("toplamMusteri")
+        .textContent =
+        toplamMusteri;
+
+    document.getElementById("toplamM2")
+        .textContent =
+        toplamM2.toLocaleString("tr-TR");
+
+    document.getElementById("toplamTutar")
+        .textContent =
+        toplamTutar.toLocaleString("tr-TR") + " TL";
+
+    document.getElementById("bekleyenOdeme")
+        .textContent =
+        bekleyenOdeme.toLocaleString("tr-TR") + " TL";
+
+
+    if(liste.length === 0){
+
+        document.getElementById("musteriListesi").innerHTML =
+            '<div class="empty">👥 Henüz müşteri kaydı yok.</div>';
+
+        return;
+    }
+
+
+    document.getElementById("musteriListesi").innerHTML =
+
+        liste.map(m => `
+
+            <div class="customer">
+
+                <div class="customer-header">
+
+                    <div>
+
+                        <div class="customer-name">
+                            ${guvenli(m.ad_soyad)}
+                        </div>
+
+                        <div class="customer-phone">
+                            📞 ${guvenli(m.telefon)}
+                        </div>
+
+                    </div>
+
+                    <div class="badge">
+                        ${guvenli(m.odeme_durumu || "Ödenmedi")}
+                    </div>
+
+                </div>
+
+
+                <div class="customer-info">
+
+                    📍 ${guvenli(m.adres || "-")}<br>
+
+                    📅 Alım:
+                    ${guvenli(m.alim_tarihi || "-")}<br>
+
+                    🚚 Teslim:
+                    ${guvenli(m.teslim_tarihi || "-")}<br>
+
+                    🧼 Halı:
+                    ${m.hali_m2 ?? "-"} m²<br>
+
+                    💰 Tutar:
+                    ${m.tutar ?? "-"} TL
+
+                    ${
+                        m.notlar
+                        ? "<br>📝 " + guvenli(m.notlar)
+                        : ""
+                    }
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                        class="action"
+                        onclick="ara('${guvenliJS(m.telefon)}')">
+                        📞 Ara
+                    </button>
+
+                    <button
+                        class="action whatsapp"
+                        onclick="whatsapp('${guvenliJS(m.telefon)}')">
+                        💬 WhatsApp
+                    </button>
+
+                    <button
+                        class="action delete"
+                        onclick="musteriSil('${m.id}')">
+                        🗑️ Sil
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* TELEFON */
+
+function ara(telefon){
+
+    const temiz =
+        telefon.replace(/\D/g,"");
+
+    window.location.href =
+        "tel:" + temiz;
+
+}
+
+
+/* WHATSAPP */
+
+function whatsapp(telefon){
+
+    let temiz =
+        telefon.replace(/\D/g,"");
+
+    if(temiz.startsWith("0")){
+
+        temiz =
+            "90" + temiz.substring(1);
+
+    }
+
+    if(!temiz.startsWith("90")){
+
+        temiz =
+            "90" + temiz;
+
+    }
+
+    window.open(
+        "https://wa.me/" + temiz,
+        "_blank"
+    );
+
+}
+
+
+/* MÜŞTERİ SİL */
+
+async function musteriSil(id){
+
+    const onay =
+        confirm(
+            "Bu müşteriyi silmek istediğine emin misin?"
+        );
+
+    if(!onay){
+
+        return;
+    }
+
+
+    const {error} =
+        await client
+        .from("Müşteriler")
+        .delete()
+        .eq("id",id);
+
+
+    if(error){
+
+        alert(
+            "Müşteri silinemedi: " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    await musterileriGetir();
+
+}
+
+
+/* GÜVENLİ METİN */
+
+function guvenli(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function guvenliJS(text){
+
+    return String(text)
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/"/g,"&quot;");
+
+}
+
+
+/* BAŞLAT */
 
 oturumKontrol();
 
