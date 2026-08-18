@@ -54,7 +54,17 @@ button{background:#1677ff;color:white;border:0;font-weight:bold;cursor:pointer}
 <div id="loginMessage"></div>
 </div>
 
+<div class="card">
+    <h2>🔐 Şifre Değiştir</h2>
 
+    <input id="yeniSifre" type="password" placeholder="Yeni şifre">
+
+    <input id="yeniSifreTekrar" type="password" placeholder="Yeni şifre tekrar">
+
+    <button onclick="sifreDegistir()">Şifreyi Kaydet</button>
+
+    <div id="sifreMessage"></div>
+</div>
 <div id="app" class="hidden">
 
 <div class="card">
@@ -104,7 +114,43 @@ oninput="musterileriGetir()">
 </div>
 </div>
 
+async function sifreDegistir(){
 
+    const sifre =
+        document.getElementById("yeniSifre").value;
+
+    const tekrar =
+        document.getElementById("yeniSifreTekrar").value;
+
+    const message =
+        document.getElementById("sifreMessage");
+
+    if(sifre.length < 6){
+        message.innerHTML =
+            "⚠️ Şifre en az 6 karakter olmalı.";
+        return;
+    }
+
+    if(sifre !== tekrar){
+        message.innerHTML =
+            "⚠️ Şifreler aynı değil.";
+        return;
+    }
+
+    const { error } =
+        await client.auth.updateUser({
+            password: sifre
+        });
+
+    if(error){
+        message.innerHTML =
+            "❌ Şifre değiştirilemedi: " + error.message;
+        return;
+    }
+
+    message.innerHTML =
+        "✅ Şifre başarıyla değiştirildi!";
+}
 <script>
 
 const SUPABASE_URL =
