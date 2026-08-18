@@ -1,10 +1,10 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parlak Clean - Müşteri Takip</title>
+<title>Parlak Clean</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -13,14 +13,29 @@
     box-sizing:border-box;
 }
 
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f4f7fb;
-    color:#172033;
+:root{
+    --blue:#1677ff;
+    --dark:#172033;
+    --muted:#7b8494;
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --border:#e7ebf2;
+    --green:#19a463;
+    --orange:#f59e0b;
+    --red:#e5484d;
 }
 
-button,input,textarea,select{
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--dark);
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
     font:inherit;
 }
 
@@ -28,128 +43,317 @@ button{
     cursor:pointer;
 }
 
+.hidden{
+    display:none!important;
+}
+
+.app{
+    min-height:100vh;
+    padding-bottom:90px;
+}
+
 .container{
+    width:100%;
     max-width:1100px;
     margin:auto;
-    padding:18px;
+    padding:16px;
 }
 
-/* ÜST ALAN */
+/* HEADER */
 
-.header{
+.top-header{
     background:linear-gradient(135deg,#1677ff,#0757c9);
     color:white;
-    padding:24px;
-    border-radius:22px;
-    margin-bottom:18px;
-    box-shadow:0 8px 25px rgba(22,119,255,.25);
+    padding:22px 18px 28px;
+    border-radius:0 0 28px 28px;
+    box-shadow:0 8px 25px rgba(22,119,255,.22);
 }
 
-.header-top{
+.top-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:15px;
 }
 
-.logo{
-    font-size:25px;
-    font-weight:bold;
+.brand{
+    font-size:23px;
+    font-weight:800;
 }
 
-.subtitle{
+.brand-sub{
+    font-size:13px;
     opacity:.85;
-    margin-top:5px;
+    margin-top:4px;
 }
 
 .logout{
-    background:rgba(255,255,255,.18);
-    color:white;
     border:1px solid rgba(255,255,255,.35);
-    padding:10px 14px;
+    background:rgba(255,255,255,.15);
+    color:white;
+    padding:9px 13px;
     border-radius:10px;
 }
 
-/* ÖZET */
+/* DASHBOARD */
+
+.welcome{
+    margin-top:20px;
+    font-size:25px;
+    font-weight:800;
+}
+
+.date-text{
+    color:var(--muted);
+    margin-top:5px;
+}
 
 .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:12px;
-    margin-bottom:18px;
+    margin-top:18px;
 }
 
 .stat{
     background:white;
+    border:1px solid var(--border);
     border-radius:17px;
-    padding:17px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    padding:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.04);
 }
 
 .stat-icon{
-    font-size:25px;
+    font-size:23px;
 }
 
-.stat-title{
-    color:#777;
-    font-size:13px;
+.stat-label{
+    color:var(--muted);
+    font-size:12px;
     margin-top:7px;
 }
 
 .stat-value{
-    font-size:22px;
-    font-weight:bold;
-    margin-top:5px;
+    font-size:21px;
+    font-weight:800;
+    margin-top:4px;
 }
 
-/* BUTON */
+/* QUICK */
 
-.add-button{
-    width:100%;
+.section-title{
+    font-size:18px;
+    font-weight:800;
+    margin:24px 0 12px;
+}
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.quick{
     border:0;
-    background:#1677ff;
-    color:white;
-    padding:16px;
-    border-radius:15px;
-    font-weight:bold;
-    font-size:17px;
-    margin-bottom:18px;
-    box-shadow:0 6px 18px rgba(22,119,255,.25);
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:18px 10px;
+    box-shadow:0 3px 12px rgba(0,0,0,.04);
 }
 
-/* KART */
+.quick-icon{
+    font-size:28px;
+}
+
+.quick-text{
+    margin-top:8px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+/* CARD */
 
 .card{
     background:white;
-    padding:20px;
-    margin-bottom:18px;
+    border:1px solid var(--border);
     border-radius:18px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    padding:18px;
+    margin-top:16px;
+    box-shadow:0 3px 12px rgba(0,0,0,.04);
 }
 
 .card h2{
-    margin-top:0;
+    margin:0 0 15px;
+}
+
+/* TODAY */
+
+.today-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.today-item:last-child{
+    border-bottom:0;
+}
+
+.time{
+    font-weight:800;
+    width:55px;
+}
+
+.today-main{
+    flex:1;
+}
+
+.today-name{
+    font-weight:bold;
+}
+
+.today-detail{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:3px;
+}
+
+.status{
+    padding:6px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+    background:#eef2f7;
+}
+
+.status.alinacak{
+    background:#fff4db;
+    color:#a56800;
+}
+
+.status.yikamaday{
+    background:#e9f1ff;
+    color:#1764d1;
+}
+
+.status.hazir{
+    background:#e9f9f0;
+    color:#08763e;
+}
+
+.status.teslim{
+    background:#eee9ff;
+    color:#6941c6;
+}
+
+/* SEARCH */
+
+.search{
+    position:relative;
+}
+
+.search input{
+    width:100%;
+    padding:14px 15px 14px 43px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    outline:none;
+    background:#fafbfc;
+}
+
+.search-icon{
+    position:absolute;
+    left:15px;
+    top:13px;
+}
+
+/* CUSTOMER */
+
+.customer{
+    padding:16px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.customer:last-child{
+    border-bottom:0;
+}
+
+.customer-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.customer-name{
+    font-size:17px;
+    font-weight:800;
+}
+
+.customer-phone{
+    color:var(--blue);
+    margin-top:5px;
+}
+
+.customer-info{
+    color:#5f6878;
+    line-height:1.7;
+    margin-top:8px;
+    font-size:14px;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:12px;
+}
+
+.action{
+    border:0;
+    background:#eef4ff;
+    color:var(--blue);
+    border-radius:9px;
+    padding:10px 7px;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.action.green{
+    background:#e9f9f0;
+    color:#11874e;
+}
+
+.action.red{
+    background:#fff0f0;
+    color:#c83238;
 }
 
 /* FORM */
+
+.form-group{
+    margin-bottom:5px;
+}
+
+label{
+    display:block;
+    font-size:12px;
+    color:#616b7b;
+    font-weight:bold;
+    margin-top:10px;
+}
 
 input,
 textarea,
 select{
     width:100%;
+    border:1px solid #dce1e9;
+    border-radius:11px;
     padding:13px;
-    margin-top:7px;
-    margin-bottom:13px;
-    border:1px solid #d8dee8;
-    border-radius:10px;
-    background:#fff;
+    margin-top:6px;
     outline:none;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-    border-color:#1677ff;
+    background:white;
 }
 
 textarea{
@@ -157,125 +361,32 @@ textarea{
     resize:vertical;
 }
 
-label{
-    font-size:13px;
-    font-weight:bold;
-    color:#555;
-}
-
-.save-button{
+.primary{
     width:100%;
-    border:0;
-    background:#16a05d;
+    background:var(--blue);
     color:white;
+    border:0;
     padding:14px;
     border-radius:11px;
     font-weight:bold;
+    margin-top:12px;
 }
 
-.cancel-button{
+.secondary{
     width:100%;
-    border:0;
     background:#eef1f5;
     color:#333;
+    border:0;
     padding:13px;
     border-radius:11px;
     margin-top:8px;
 }
 
-/* ARAMA */
-
-.search{
-    position:relative;
-}
-
-.search input{
-    padding-left:42px;
-    font-size:16px;
-}
-
-.search-icon{
-    position:absolute;
-    left:14px;
-    top:20px;
-    font-size:18px;
-}
-
-/* MÜŞTERİ */
-
-.customer{
-    border:1px solid #e1e6ee;
-    border-radius:15px;
-    padding:16px;
-    margin-top:12px;
-}
-
-.customer-header{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    align-items:flex-start;
-}
-
-.customer-name{
-    font-size:18px;
-    font-weight:bold;
-}
-
-.customer-phone{
-    color:#1677ff;
-    margin-top:6px;
-}
-
-.customer-info{
-    color:#555;
-    margin-top:10px;
-    line-height:1.6;
-}
-
-.badge{
-    display:inline-block;
-    padding:6px 10px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
-    background:#eef2f7;
-}
-
-.actions{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-    margin-top:14px;
-}
-
-.action{
-    border:0;
-    padding:10px;
-    border-radius:9px;
-    background:#eef4ff;
-    color:#1677ff;
-    font-weight:bold;
-}
-
-.action.whatsapp{
-    background:#e9f9f0;
-    color:#119451;
-}
-
-.action.delete{
-    background:#fff0f0;
-    color:#d33;
-}
-
-.hidden{
-    display:none !important;
-}
-
 .message{
     padding:11px;
+    border-radius:10px;
     margin-top:10px;
-    border-radius:9px;
+    font-size:14px;
 }
 
 .success{
@@ -285,16 +396,72 @@ label{
 
 .error{
     background:#fff0f0;
-    color:#b00020;
+    color:#b42318;
 }
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:72px;
+    background:white;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:center;
+    z-index:100;
+    box-shadow:0 -5px 20px rgba(0,0,0,.07);
+}
+
+.nav-inner{
+    width:100%;
+    max-width:700px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+}
+
+.nav-btn{
+    border:0;
+    background:white;
+    color:#8992a2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    font-size:11px;
+}
+
+.nav-btn .icon{
+    font-size:20px;
+}
+
+.nav-btn.active{
+    color:var(--blue);
+    font-weight:bold;
+}
+
+/* PAGE */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* EMPTY */
 
 .empty{
     text-align:center;
-    color:#777;
+    color:var(--muted);
     padding:30px 10px;
 }
 
-/* MOBİL */
+/* MOBILE */
 
 @media(max-width:750px){
 
@@ -302,36 +469,40 @@ label{
         padding:12px;
     }
 
-    .header{
-        padding:20px;
-        border-radius:18px;
-    }
-
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .header-top{
-        align-items:flex-start;
+    .quick-grid{
+        grid-template-columns:repeat(2,1fr);
     }
 
-    .logo{
-        font-size:22px;
-    }
-
-    .actions{
-        grid-template-columns:1fr 1fr 1fr;
+    .top-header{
+        margin:0 -12px;
+        border-radius:0 0 24px 24px;
     }
 }
 
 @media(max-width:430px){
 
-    .actions{
-        grid-template-columns:1fr;
+    .brand{
+        font-size:20px;
     }
 
-    .customer-header{
-        flex-direction:column;
+    .stats{
+        gap:8px;
+    }
+
+    .stat{
+        padding:13px;
+    }
+
+    .stat-value{
+        font-size:18px;
+    }
+
+    .actions{
+        grid-template-columns:1fr 1fr 1fr;
     }
 }
 </style>
@@ -339,17 +510,19 @@ label{
 
 <body>
 
-<div class="container">
+<div id="app" class="app">
 
-<!-- ANA BAŞLIK -->
+<!-- HEADER -->
 
-<div class="header">
+<header class="top-header">
 
-    <div class="header-top">
+    <div class="top-row">
 
         <div>
-            <div class="logo">🧼 PARLAK CLEAN</div>
-            <div class="subtitle">Halı & Koltuk Yıkama</div>
+            <div class="brand">🧼 PARLAK CLEAN</div>
+            <div class="brand-sub">
+                Halı & Koltuk Yıkama
+            </div>
         </div>
 
         <button class="logout" onclick="logout()">
@@ -358,132 +531,408 @@ label{
 
     </div>
 
-</div>
+</header>
 
 
-<!-- ÖZET -->
+<div class="container">
 
-<div class="stats">
 
-    <div class="stat">
-        <div class="stat-icon">👥</div>
-        <div class="stat-title">Toplam Müşteri</div>
-        <div class="stat-value" id="toplamMusteri">0</div>
+<!-- ================= ANA SAYFA ================= -->
+
+<section id="pageHome" class="page active">
+
+    <div class="welcome">
+        Hoş geldin 👋
     </div>
 
-    <div class="stat">
-        <div class="stat-icon">🧼</div>
-        <div class="stat-title">Toplam M²</div>
-        <div class="stat-value" id="toplamM2">0</div>
+    <div class="date-text" id="bugunTarihi">
+        Bugünün işleri
     </div>
 
-    <div class="stat">
-        <div class="stat-icon">💰</div>
-        <div class="stat-title">Toplam Tutar</div>
-        <div class="stat-value" id="toplamTutar">0 TL</div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-icon">👥</div>
+            <div class="stat-label">Müşteriler</div>
+            <div class="stat-value" id="toplamMusteri">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🧼</div>
+            <div class="stat-label">Toplam M²</div>
+            <div class="stat-value" id="toplamM2">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">💰</div>
+            <div class="stat-label">Toplam Ciro</div>
+            <div class="stat-value" id="toplamTutar">0 TL</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-label">Bekleyen</div>
+            <div class="stat-value" id="bekleyenOdeme">0 TL</div>
+        </div>
+
     </div>
 
-    <div class="stat">
-        <div class="stat-icon">⏳</div>
-        <div class="stat-title">Bekleyen Ödeme</div>
-        <div class="stat-value" id="bekleyenOdeme">0 TL</div>
+
+    <div class="section-title">
+        Hızlı İşlemler
     </div>
 
-</div>
+
+    <div class="quick-grid">
+
+        <button class="quick" onclick="musteriFormAc()">
+            <div class="quick-icon">👤</div>
+            <div class="quick-text">Yeni Müşteri</div>
+        </button>
+
+        <button class="quick" onclick="musteriFormAc()">
+            <div class="quick-icon">➕</div>
+            <div class="quick-text">Yeni İş</div>
+        </button>
+
+        <button class="quick" onclick="sayfaAc('pageCustomers','navCustomers')">
+            <div class="quick-icon">🔎</div>
+            <div class="quick-text">Müşteri Ara</div>
+        </button>
+
+        <button class="quick" onclick="sayfaAc('pageCash','navCash')">
+            <div class="quick-icon">💰</div>
+            <div class="quick-text">Kasa</div>
+        </button>
+
+    </div>
 
 
-<!-- MÜŞTERİ EKLE BUTONU -->
+    <div class="card">
 
-<button class="add-button" onclick="formAc()">
-    ➕ Yeni Müşteri Ekle
-</button>
+        <h2>📅 Bugünkü İşler</h2>
+
+        <div id="bugunkuIsler">
+            <div class="empty">
+                Bugün için kayıt bulunmuyor.
+            </div>
+        </div>
+
+    </div>
+
+</section>
 
 
-<!-- MÜŞTERİ FORMU -->
+<!-- ================= İŞLER ================= -->
 
-<div id="formBox" class="card hidden">
+<section id="pageJobs" class="page">
 
-    <h2 id="formBaslik">➕ Yeni Müşteri</h2>
+    <div class="section-title">
+        📦 İşler
+    </div>
 
-    <input id="adSoyad" type="text" placeholder="Ad Soyad">
+    <div class="card">
 
-    <input id="telefon" type="tel" placeholder="Telefon">
+        <div class="search">
 
-    <textarea id="adres" placeholder="Adres"></textarea>
+            <div class="search-icon">🔎</div>
 
-    <label>Alım Tarihi</label>
-    <input id="alimTarihi" type="date">
+            <input
+                id="isArama"
+                placeholder="İş veya müşteri ara..."
+                oninput="musterileriGetir()"
+            >
 
-    <label>Teslim Tarihi</label>
-    <input id="teslimTarihi" type="date">
+        </div>
 
-    <input id="haliM2" type="number" step="0.1" placeholder="Halı M²">
+        <div id="islerListesi"></div>
 
-    <input id="tutar" type="number" step="0.01" placeholder="Tutar (TL)">
+    </div>
 
-    <label>İş Durumu</label>
+</section>
 
-    <select id="isDurumu">
-        <option value="Alınacak">Alınacak</option>
-        <option value="Yıkamada">Yıkamada</option>
-        <option value="Hazır">Hazır</option>
-        <option value="Teslim Edildi">Teslim Edildi</option>
-    </select>
 
-    <label>Ödeme Durumu</label>
+<!-- ================= MÜŞTERİLER ================= -->
 
-    <select id="odemeDurumu">
-        <option value="Ödenmedi">Ödenmedi</option>
-        <option value="Kapora">Kapora</option>
-        <option value="Ödendi">Ödendi</option>
-    </select>
+<section id="pageCustomers" class="page">
 
-    <textarea id="notlar" placeholder="Notlar"></textarea>
+    <div class="section-title">
+        👥 Müşteriler
+    </div>
 
-    <button class="save-button" onclick="musteriKaydet()">
-        💾 Müşteriyi Kaydet
+    <button class="primary" onclick="musteriFormAc()">
+        ➕ Yeni Müşteri Ekle
     </button>
 
-    <button class="cancel-button" onclick="formKapat()">
-        Vazgeç
-    </button>
 
-    <div id="saveMessage"></div>
+    <div id="formBox" class="card hidden">
 
-</div>
-
-
-<!-- MÜŞTERİLER -->
-
-<div class="card">
-
-    <h2>👥 Müşteriler</h2>
-
-    <div class="search">
-
-        <div class="search-icon">🔎</div>
+        <h2>👤 Yeni Müşteri</h2>
 
         <input
-            id="arama"
-            type="text"
-            placeholder="Müşteri adı veya telefon ara..."
-            oninput="musterileriGetir()"
+            id="adSoyad"
+            placeholder="Ad Soyad"
         >
 
+        <input
+            id="telefon"
+            type="tel"
+            placeholder="Telefon"
+        >
+
+        <textarea
+            id="adres"
+            placeholder="Adres"
+        ></textarea>
+
+        <label>Alım Tarihi</label>
+
+        <input
+            id="alimTarihi"
+            type="date"
+        >
+
+        <label>Teslim Tarihi</label>
+
+        <input
+            id="teslimTarihi"
+            type="date"
+        >
+
+        <input
+            id="haliM2"
+            type="number"
+            step="0.1"
+            placeholder="Halı M²"
+        >
+
+        <input
+            id="tutar"
+            type="number"
+            step="0.01"
+            placeholder="Tutar (TL)"
+        >
+
+        <label>İş Durumu</label>
+
+        <select id="isDurumu">
+            <option>Alınacak</option>
+            <option>Yıkamada</option>
+            <option>Hazır</option>
+            <option>Teslim Edildi</option>
+        </select>
+
+        <label>Ödeme Durumu</label>
+
+        <select id="odemeDurumu">
+            <option>Ödenmedi</option>
+            <option>Kapora</option>
+            <option>Ödendi</option>
+        </select>
+
+        <textarea
+            id="notlar"
+            placeholder="Notlar"
+        ></textarea>
+
+        <button
+            class="primary"
+            onclick="musteriKaydet()"
+        >
+            💾 Kaydet
+        </button>
+
+        <button
+            class="secondary"
+            onclick="formKapat()"
+        >
+            Vazgeç
+        </button>
+
+        <div id="saveMessage"></div>
+
     </div>
 
-    <div id="musteriListesi">
-        Yükleniyor...
+
+    <div class="card">
+
+        <div class="search">
+
+            <div class="search-icon">🔎</div>
+
+            <input
+                id="arama"
+                placeholder="Ad, soyad veya telefon..."
+                oninput="musterileriGetir()"
+            >
+
+        </div>
+
+        <div id="musteriListesi">
+            Yükleniyor...
+        </div>
+
     </div>
+
+</section>
+
+
+<!-- ================= KASA ================= -->
+
+<section id="pageCash" class="page">
+
+    <div class="section-title">
+        💰 Kasa
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-icon">💵</div>
+            <div class="stat-label">Toplam</div>
+            <div class="stat-value" id="kasaToplam">0 TL</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">✅</div>
+            <div class="stat-label">Ödenen</div>
+            <div class="stat-value" id="kasaOdenen">0 TL</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-label">Bekleyen</div>
+            <div class="stat-value" id="kasaBekleyen">0 TL</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🧼</div>
+            <div class="stat-label">Toplam M²</div>
+            <div class="stat-value" id="kasaM2">0</div>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>💳 Ödeme Özeti</h2>
+
+        <div id="kasaListe">
+            Veriler yükleniyor...
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DAHA FAZLA ================= -->
+
+<section id="pageMore" class="page">
+
+    <div class="section-title">
+        ⚙️ Daha Fazla
+    </div>
+
+    <div class="card">
+
+        <h2>📊 Raporlar</h2>
+
+        <p>
+            Günlük, haftalık ve aylık raporlar
+            burada olacak.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📅 Takvim</h2>
+
+        <p>
+            Alım ve teslim tarihlerini
+            takvim üzerinden takip edeceğiz.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>⚙️ Ayarlar</h2>
+
+        <p>
+            İşletme ayarları ve uygulama
+            seçenekleri burada olacak.
+        </p>
+
+    </div>
+
+</section>
 
 </div>
 
-</div>
+
+<!-- ALT MENÜ -->
+
+<nav class="bottom-nav">
+
+    <div class="nav-inner">
+
+        <button
+            id="navHome"
+            class="nav-btn active"
+            onclick="sayfaAc('pageHome','navHome')"
+        >
+            <span class="icon">🏠</span>
+            Ana Sayfa
+        </button>
+
+        <button
+            id="navJobs"
+            class="nav-btn"
+            onclick="sayfaAc('pageJobs','navJobs')"
+        >
+            <span class="icon">📦</span>
+            İşler
+        </button>
+
+        <button
+            id="navCustomers"
+            class="nav-btn"
+            onclick="sayfaAc('pageCustomers','navCustomers')"
+        >
+            <span class="icon">👥</span>
+            Müşteriler
+        </button>
+
+        <button
+            id="navCash"
+            class="nav-btn"
+            onclick="sayfaAc('pageCash','navCash')"
+        >
+            <span class="icon">💰</span>
+            Kasa
+        </button>
+
+        <button
+            id="navMore"
+            class="nav-btn"
+            onclick="sayfaAc('pageMore','navMore')"
+        >
+            <span class="icon">☰</span>
+            Daha Fazla
+        </button>
+
+    </div>
+
+</nav>
 
 
 <script>
 
-/* SUPABASE */
+/* ================= SUPABASE ================= */
 
 const SUPABASE_URL =
 "https://ynbcnhsipsktgrnqidfa.supabase.co";
@@ -498,50 +947,709 @@ window.supabase.createClient(
 );
 
 
-/* GİRİŞ */
+/* ================= SAYFA ================= */
 
-async function login(){
+function sayfaAc(pageId,navId){
 
-    const email =
-        document.getElementById("email").value.trim();
+    document
+        .querySelectorAll(".page")
+        .forEach(p =>
+            p.classList.remove("active")
+        );
 
-    const password =
-        document.getElementById("password").value;
+    document
+        .getElementById(pageId)
+        .classList.add("active");
 
-    const message =
-        document.getElementById("loginMessage");
 
-    if(!email || !password){
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(b =>
+            b.classList.remove("active")
+        );
 
-        message.innerHTML =
-            "⚠️ E-posta ve şifre gir.";
+    document
+        .getElementById(navId)
+        .classList.add("active");
 
-        return;
-    }
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
-    message.innerHTML =
-        "⏳ Giriş yapılıyor...";
-
-    const result =
-        await client.auth.signInWithPassword({
-            email:email,
-            password:password
-        });
-
-    if(result.error){
-
-        message.innerHTML =
-            "❌ Giriş başarısız: " +
-            result.error.message;
-
-        return;
-    }
-
-    await uygulamayiAc();
 }
 
 
-/* OTURUM */
+/* ================= FORM ================= */
+
+function musteriFormAc(){
+
+    sayfaAc(
+        "pageCustomers",
+        "navCustomers"
+    );
+
+    document
+        .getElementById("formBox")
+        .classList.remove("hidden");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function formKapat(){
+
+    document
+        .getElementById("formBox")
+        .classList.add("hidden");
+
+}
+
+
+/* ================= GÜVENLİ METİN ================= */
+
+function guvenli(text){
+
+    return String(text ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= MÜŞTERİ KAYDET ================= */
+
+async function musteriKaydet(){
+
+    const {data:{user}} =
+        await client.auth.getUser();
+
+    if(!user){
+
+        alert("Oturum bulunamadı.");
+
+        return;
+    }
+
+
+    const kayit = {
+
+        ad_soyad:
+            document
+            .getElementById("adSoyad")
+            .value
+            .trim(),
+
+        telefon:
+            document
+            .getElementById("telefon")
+            .value
+            .trim(),
+
+        adres:
+            document
+            .getElementById("adres")
+            .value
+            .trim(),
+
+        alim_tarihi:
+            document
+            .getElementById("alimTarihi")
+            .value || null,
+
+        teslim_tarihi:
+            document
+            .getElementById("teslimTarihi")
+            .value || null,
+
+        hali_m2:
+            document
+            .getElementById("haliM2")
+            .value
+            ?
+            Number(
+                document
+                .getElementById("haliM2")
+                .value
+            )
+            :
+            null,
+
+        tutar:
+            document
+            .getElementById("tutar")
+            .value
+            ?
+            Number(
+                document
+                .getElementById("tutar")
+                .value
+            )
+            :
+            null,
+
+        odeme_durumu:
+            document
+            .getElementById("odemeDurumu")
+            .value,
+
+        notlar:
+            document
+            .getElementById("notlar")
+            .value
+            .trim(),
+
+        user_id:user.id
+
+    };
+
+
+    if(!kayit.ad_soyad ||
+       !kayit.telefon){
+
+        document
+        .getElementById("saveMessage")
+        .innerHTML =
+        '<div class="message error">' +
+        '⚠️ Ad soyad ve telefon gerekli.' +
+        '</div>';
+
+        return;
+    }
+
+
+    const {error} =
+        await client
+        .from("Müşteriler")
+        .insert([kayit]);
+
+
+    if(error){
+
+        document
+        .getElementById("saveMessage")
+        .innerHTML =
+        '<div class="message error">' +
+        '❌ Kayıt hatası: ' +
+        guvenli(error.message) +
+        '</div>';
+
+        return;
+    }
+
+
+    document
+    .getElementById("saveMessage")
+    .innerHTML =
+    '<div class="message success">' +
+    '✅ Müşteri kaydedildi!' +
+    '</div>';
+
+
+    formTemizle();
+
+    await musterileriGetir();
+
+}
+
+
+/* ================= FORM TEMİZLE ================= */
+
+function formTemizle(){
+
+    document.getElementById("adSoyad").value="";
+    document.getElementById("telefon").value="";
+    document.getElementById("adres").value="";
+    document.getElementById("alimTarihi").value="";
+    document.getElementById("teslimTarihi").value="";
+    document.getElementById("haliM2").value="";
+    document.getElementById("tutar").value="";
+    document.getElementById("notlar").value="";
+
+}
+
+
+/* ================= MÜŞTERİLER ================= */
+
+async function musterileriGetir(){
+
+    const {data:{user}} =
+        await client.auth.getUser();
+
+    if(!user){
+
+        return;
+    }
+
+
+    const arama =
+        (
+            document
+            .getElementById("arama")
+            ?.value ||
+            document
+            .getElementById("isArama")
+            ?.value ||
+            ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const {data,error} =
+        await client
+        .from("Müşteriler")
+        .select("*")
+        .eq("user_id",user.id)
+        .order(
+            "created_at",
+            {ascending:false}
+        );
+
+
+    if(error){
+
+        document
+        .getElementById("musteriListesi")
+        .innerHTML =
+        '<div class="message error">' +
+        guvenli(error.message) +
+        '</div>';
+
+        return;
+    }
+
+
+    const liste =
+        (data || []).filter(m => {
+
+            if(!arama){
+
+                return true;
+
+            }
+
+            return (
+                (m.ad_soyad || "")
+                .toLowerCase()
+                .includes(arama)
+                ||
+                (m.telefon || "")
+                .toLowerCase()
+                .includes(arama)
+            );
+
+        });
+
+
+    /* İSTATİSTİK */
+
+    const toplamM2 =
+        (data || [])
+        .reduce(
+            (a,m)=>
+                a + Number(m.hali_m2 || 0),
+            0
+        );
+
+
+    const toplamTutar =
+        (data || [])
+        .reduce(
+            (a,m)=>
+                a + Number(m.tutar || 0),
+            0
+        );
+
+
+    const bekleyen =
+        (data || [])
+        .filter(
+            m =>
+            m.odeme_durumu !== "Ödendi"
+        )
+        .reduce(
+            (a,m)=>
+                a + Number(m.tutar || 0),
+            0
+        );
+
+
+    const odenen =
+        toplamTutar - bekleyen;
+
+
+    document.getElementById(
+        "toplamMusteri"
+    ).textContent =
+        data?.length || 0;
+
+
+    document.getElementById(
+        "toplamM2"
+    ).textContent =
+        toplamM2.toLocaleString("tr-TR");
+
+
+    document.getElementById(
+        "toplamTutar"
+    ).textContent =
+        toplamTutar.toLocaleString("tr-TR")
+        + " TL";
+
+
+    document.getElementById(
+        "bekleyenOdeme"
+    ).textContent =
+        bekleyen.toLocaleString("tr-TR")
+        + " TL";
+
+
+    document.getElementById(
+        "kasaToplam"
+    ).textContent =
+        toplamTutar.toLocaleString("tr-TR")
+        + " TL";
+
+
+    document.getElementById(
+        "kasaOdenen"
+    ).textContent =
+        odenen.toLocaleString("tr-TR")
+        + " TL";
+
+
+    document.getElementById(
+        "kasaBekleyen"
+    ).textContent =
+        bekleyen.toLocaleString("tr-TR")
+        + " TL";
+
+
+    document.getElementById(
+        "kasaM2"
+    ).textContent =
+        toplamM2.toLocaleString("tr-TR");
+
+
+    /* MÜŞTERİ LİSTESİ */
+
+    if(!liste.length){
+
+        document
+        .getElementById("musteriListesi")
+        .innerHTML =
+        '<div class="empty">' +
+        '👥 Henüz müşteri kaydı yok.' +
+        '</div>';
+
+    }else{
+
+        document
+        .getElementById("musteriListesi")
+        .innerHTML =
+        liste.map(m => `
+
+            <div class="customer">
+
+                <div class="customer-top">
+
+                    <div>
+
+                        <div class="customer-name">
+                            ${guvenli(m.ad_soyad)}
+                        </div>
+
+                        <div class="customer-phone">
+                            📞 ${guvenli(m.telefon)}
+                        </div>
+
+                    </div>
+
+                    <div class="status">
+                        ${guvenli(
+                            m.odeme_durumu ||
+                            "Ödenmedi"
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="customer-info">
+
+                    📍 ${guvenli(m.adres || "-")}<br>
+
+                    📅 Alım:
+                    ${guvenli(
+                        m.alim_tarihi || "-"
+                    )}<br>
+
+                    🚚 Teslim:
+                    ${guvenli(
+                        m.teslim_tarihi || "-"
+                    )}<br>
+
+                    🧼 ${m.hali_m2 ?? "-"} m²
+
+                    &nbsp; • &nbsp;
+
+                    💰 ${m.tutar ?? "-"} TL
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                        class="action"
+                        onclick="ara('${telefonJS(m.telefon)}')"
+                    >
+                        📞 Ara
+                    </button>
+
+                    <button
+                        class="action green"
+                        onclick="whatsapp('${telefonJS(m.telefon)}')"
+                    >
+                        💬 WhatsApp
+                    </button>
+
+                    <button
+                        class="action red"
+                        onclick="musteriSil('${m.id}')"
+                    >
+                        🗑️ Sil
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+    }
+
+
+    /* KASA LİSTESİ */
+
+    document.getElementById("kasaListe").innerHTML =
+        liste.length
+        ?
+        liste.slice(0,10).map(m => `
+
+            <div class="today-item">
+
+                <div class="today-main">
+
+                    <div class="today-name">
+                        ${guvenli(m.ad_soyad)}
+                    </div>
+
+                    <div class="today-detail">
+                        ${m.tutar ?? 0} TL
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    ${guvenli(
+                        m.odeme_durumu ||
+                        "Ödenmedi"
+                    )}
+                </div>
+
+            </div>
+
+        `).join("")
+        :
+        '<div class="empty">Kayıt yok.</div>';
+
+
+    /* İŞLER */
+
+    document.getElementById("islerListesi").innerHTML =
+        liste.length
+        ?
+        liste.map(m => `
+
+            <div class="today-item">
+
+                <div class="today-main">
+
+                    <div class="today-name">
+                        ${guvenli(m.ad_soyad)}
+                    </div>
+
+                    <div class="today-detail">
+
+                        📅
+                        ${guvenli(
+                            m.alim_tarihi || "-"
+                        )}
+
+                        →
+
+                        ${guvenli(
+                            m.teslim_tarihi || "-"
+                        )}
+
+                        •
+
+                        ${m.hali_m2 ?? 0} m²
+
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    ${guvenli(
+                        m.odeme_durumu ||
+                        "Ödenmedi"
+                    )}
+                </div>
+
+            </div>
+
+        `).join("")
+        :
+        '<div class="empty">İş bulunamadı.</div>';
+
+
+}
+
+
+/* ================= TELEFON ================= */
+
+function telefonJS(text){
+
+    return String(text || "")
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'");
+}
+
+
+function ara(telefon){
+
+    const temiz =
+        String(telefon)
+        .replace(/\D/g,"");
+
+    window.location.href =
+        "tel:" + temiz;
+
+}
+
+
+function whatsapp(telefon){
+
+    let temiz =
+        String(telefon)
+        .replace(/\D/g,"");
+
+    if(
+        temiz.startsWith("0")
+    ){
+
+        temiz =
+            "90" +
+            temiz.substring(1);
+
+    }
+
+    if(
+        !temiz.startsWith("90")
+    ){
+
+        temiz =
+            "90" + temiz;
+
+    }
+
+    window.open(
+        "https://wa.me/" +
+        temiz,
+        "_blank"
+    );
+
+}
+
+
+/* ================= SİL ================= */
+
+async function musteriSil(id){
+
+    if(
+        !confirm(
+            "Bu müşteriyi silmek istediğine emin misin?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const {error} =
+        await client
+        .from("Müşteriler")
+        .delete()
+        .eq("id",id);
+
+
+    if(error){
+
+        alert(
+            "Silinemedi: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    await musterileriGetir();
+
+}
+
+
+/* ================= BUGÜN ================= */
+
+function bugunGoster(){
+
+    const tarih =
+        new Date();
+
+    document
+    .getElementById("bugunTarihi")
+    .textContent =
+        tarih.toLocaleDateString(
+            "tr-TR",
+            {
+                weekday:"long",
+                day:"numeric",
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+}
+
+
+/* ================= OTURUM ================= */
+
+/*
+   Buraya mevcut giriş/oturum kodunu
+   daha sonra birlikte bağlayacağız.
+*/
 
 async function oturumKontrol(){
 
@@ -557,16 +1665,18 @@ async function oturumKontrol(){
 }
 
 
-/* UYGULAMA */
-
 async function uygulamayiAc(){
+
+    document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+    bugunGoster();
 
     await musterileriGetir();
 
 }
 
-
-/* ÇIKIŞ */
 
 async function logout(){
 
@@ -577,464 +1687,9 @@ async function logout(){
 }
 
 
-/* FORM AÇ */
+/* ================= BAŞLAT ================= */
 
-function formAc(){
-
-    document
-        .getElementById("formBox")
-        .classList.remove("hidden");
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-}
-
-
-/* FORM KAPAT */
-
-function formKapat(){
-
-    document
-        .getElementById("formBox")
-        .classList.add("hidden");
-
-    formTemizle();
-
-}
-
-
-/* FORM TEMİZLE */
-
-function formTemizle(){
-
-    document.getElementById("adSoyad").value="";
-    document.getElementById("telefon").value="";
-    document.getElementById("adres").value="";
-    document.getElementById("alimTarihi").value="";
-    document.getElementById("teslimTarihi").value="";
-    document.getElementById("haliM2").value="";
-    document.getElementById("tutar").value="";
-    document.getElementById("isDurumu").value="Alınacak";
-    document.getElementById("odemeDurumu").value="Ödenmedi";
-    document.getElementById("notlar").value="";
-    document.getElementById("saveMessage").innerHTML="";
-
-}
-
-
-/* MÜŞTERİ KAYDET */
-
-async function musteriKaydet(){
-
-    const {data:{user}} =
-        await client.auth.getUser();
-
-    if(!user){
-
-        alert("Önce giriş yapmalısın.");
-
-        return;
-    }
-
-
-    const kayit = {
-
-        ad_soyad:
-            document.getElementById("adSoyad").value.trim(),
-
-        telefon:
-            document.getElementById("telefon").value.trim(),
-
-        adres:
-            document.getElementById("adres").value.trim(),
-
-        alim_tarihi:
-            document.getElementById("alimTarihi").value || null,
-
-        teslim_tarihi:
-            document.getElementById("teslimTarihi").value || null,
-
-        hali_m2:
-            document.getElementById("haliM2").value
-            ? Number(document.getElementById("haliM2").value)
-            : null,
-
-        tutar:
-            document.getElementById("tutar").value
-            ? Number(document.getElementById("tutar").value)
-            : null,
-
-        odeme_durumu:
-            document.getElementById("odemeDurumu").value,
-
-        notlar:
-            document.getElementById("notlar").value.trim(),
-
-        user_id:
-            user.id
-
-    };
-
-
-    if(!kayit.ad_soyad || !kayit.telefon){
-
-        document.getElementById("saveMessage").innerHTML =
-            '<div class="message error">⚠️ Ad soyad ve telefon gerekli.</div>';
-
-        return;
-    }
-
-
-    /*
-       Not:
-       İş durumu sütunun mevcut tabloda yoksa
-       Supabase hata verebilir.
-       Bu yüzden önce mevcut yapıyla kayıt yapıyoruz.
-    */
-
-    const {error} =
-        await client
-        .from("Müşteriler")
-        .insert([kayit]);
-
-
-    if(error){
-
-        document.getElementById("saveMessage").innerHTML =
-            '<div class="message error">❌ Kayıt hatası: ' +
-            guvenli(error.message) +
-            '</div>';
-
-        return;
-    }
-
-
-    document.getElementById("saveMessage").innerHTML =
-        '<div class="message success">✅ Müşteri başarıyla kaydedildi!</div>';
-
-
-    formTemizle();
-
-    await musterileriGetir();
-
-}
-
-
-/* MÜŞTERİLERİ GETİR */
-
-async function musterileriGetir(){
-
-    const {data:{user}} =
-        await client.auth.getUser();
-
-    if(!user){
-
-        document.getElementById("musteriListesi").innerHTML =
-            '<div class="empty">Giriş yapmanız gerekiyor.</div>';
-
-        return;
-    }
-
-
-    const arama =
-        document
-        .getElementById("arama")
-        ?.value
-        .trim()
-        .toLowerCase() || "";
-
-
-    const {data,error} =
-        await client
-        .from("Müşteriler")
-        .select("*")
-        .eq("user_id",user.id)
-        .order("created_at",{ascending:false});
-
-
-    if(error){
-
-        document.getElementById("musteriListesi").innerHTML =
-            '<div class="message error">❌ Müşteriler alınamadı: ' +
-            guvenli(error.message) +
-            '</div>';
-
-        return;
-    }
-
-
-    let liste =
-        data || [];
-
-
-    if(arama){
-
-        liste =
-            liste.filter(m =>
-
-                (m.ad_soyad || "")
-                .toLowerCase()
-                .includes(arama)
-
-                ||
-
-                (m.telefon || "")
-                .toLowerCase()
-                .includes(arama)
-
-            );
-
-    }
-
-
-    /* ÖZETLER */
-
-    const toplamMusteri =
-        data?.length || 0;
-
-    const toplamM2 =
-        (data || [])
-        .reduce(
-            (toplam,m) =>
-                toplam + Number(m.hali_m2 || 0),
-            0
-        );
-
-    const toplamTutar =
-        (data || [])
-        .reduce(
-            (toplam,m) =>
-                toplam + Number(m.tutar || 0),
-            0
-        );
-
-    const bekleyenOdeme =
-        (data || [])
-        .filter(m =>
-            m.odeme_durumu !== "Ödendi"
-        )
-        .reduce(
-            (toplam,m) =>
-                toplam + Number(m.tutar || 0),
-            0
-        );
-
-
-    document.getElementById("toplamMusteri")
-        .textContent =
-        toplamMusteri;
-
-    document.getElementById("toplamM2")
-        .textContent =
-        toplamM2.toLocaleString("tr-TR");
-
-    document.getElementById("toplamTutar")
-        .textContent =
-        toplamTutar.toLocaleString("tr-TR") + " TL";
-
-    document.getElementById("bekleyenOdeme")
-        .textContent =
-        bekleyenOdeme.toLocaleString("tr-TR") + " TL";
-
-
-    if(liste.length === 0){
-
-        document.getElementById("musteriListesi").innerHTML =
-            '<div class="empty">👥 Henüz müşteri kaydı yok.</div>';
-
-        return;
-    }
-
-
-    document.getElementById("musteriListesi").innerHTML =
-
-        liste.map(m => `
-
-            <div class="customer">
-
-                <div class="customer-header">
-
-                    <div>
-
-                        <div class="customer-name">
-                            ${guvenli(m.ad_soyad)}
-                        </div>
-
-                        <div class="customer-phone">
-                            📞 ${guvenli(m.telefon)}
-                        </div>
-
-                    </div>
-
-                    <div class="badge">
-                        ${guvenli(m.odeme_durumu || "Ödenmedi")}
-                    </div>
-
-                </div>
-
-
-                <div class="customer-info">
-
-                    📍 ${guvenli(m.adres || "-")}<br>
-
-                    📅 Alım:
-                    ${guvenli(m.alim_tarihi || "-")}<br>
-
-                    🚚 Teslim:
-                    ${guvenli(m.teslim_tarihi || "-")}<br>
-
-                    🧼 Halı:
-                    ${m.hali_m2 ?? "-"} m²<br>
-
-                    💰 Tutar:
-                    ${m.tutar ?? "-"} TL
-
-                    ${
-                        m.notlar
-                        ? "<br>📝 " + guvenli(m.notlar)
-                        : ""
-                    }
-
-                </div>
-
-
-                <div class="actions">
-
-                    <button
-                        class="action"
-                        onclick="ara('${guvenliJS(m.telefon)}')">
-                        📞 Ara
-                    </button>
-
-                    <button
-                        class="action whatsapp"
-                        onclick="whatsapp('${guvenliJS(m.telefon)}')">
-                        💬 WhatsApp
-                    </button>
-
-                    <button
-                        class="action delete"
-                        onclick="musteriSil('${m.id}')">
-                        🗑️ Sil
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* TELEFON */
-
-function ara(telefon){
-
-    const temiz =
-        telefon.replace(/\D/g,"");
-
-    window.location.href =
-        "tel:" + temiz;
-
-}
-
-
-/* WHATSAPP */
-
-function whatsapp(telefon){
-
-    let temiz =
-        telefon.replace(/\D/g,"");
-
-    if(temiz.startsWith("0")){
-
-        temiz =
-            "90" + temiz.substring(1);
-
-    }
-
-    if(!temiz.startsWith("90")){
-
-        temiz =
-            "90" + temiz;
-
-    }
-
-    window.open(
-        "https://wa.me/" + temiz,
-        "_blank"
-    );
-
-}
-
-
-/* MÜŞTERİ SİL */
-
-async function musteriSil(id){
-
-    const onay =
-        confirm(
-            "Bu müşteriyi silmek istediğine emin misin?"
-        );
-
-    if(!onay){
-
-        return;
-    }
-
-
-    const {error} =
-        await client
-        .from("Müşteriler")
-        .delete()
-        .eq("id",id);
-
-
-    if(error){
-
-        alert(
-            "Müşteri silinemedi: " +
-            error.message
-        );
-
-        return;
-    }
-
-
-    await musterileriGetir();
-
-}
-
-
-/* GÜVENLİ METİN */
-
-function guvenli(text){
-
-    return String(text)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-function guvenliJS(text){
-
-    return String(text)
-        .replace(/\\/g,"\\\\")
-        .replace(/'/g,"\\'")
-        .replace(/"/g,"&quot;");
-
-}
-
-
-/* BAŞLAT */
+bugunGoster();
 
 oturumKontrol();
 
