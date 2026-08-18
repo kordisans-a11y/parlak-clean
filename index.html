@@ -121,68 +121,31 @@ SUPABASE_KEY
 
 async function login(){
 
-    const email =
-        document.getElementById("email").value.trim();
-
-    const password =
-        document.getElementById("password").value;
-
-    const message =
-        document.getElementById("loginMessage");
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("loginMessage");
 
     if(!email || !password){
-        message.innerHTML =
-            "⚠️ E-posta ve şifre gir.";
+        message.innerHTML = "⚠️ E-posta ve şifre gir.";
         return;
     }
 
-    const {error} =
-        await client.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
+    message.innerHTML = "⏳ Giriş yapılıyor...";
 
-    if(error){
+    const result = await client.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if(result.error){
         message.innerHTML =
-            "❌ Giriş başarısız: " + error.message;
+            "❌ Giriş başarısız: " + result.error.message;
         return;
     }
 
-    uygulamayiAc();
-}
+    message.innerHTML = "✅ Giriş başarılı!";
 
-    message.innerHTML =
-        "⏳ Giriş yapılıyor...";
-
-    const {data, error} =
-        await client.auth.signInAnonymously();
-
-    if(error){
-        message.innerHTML =
-            "❌ Giriş başarısız: " + error.message;
-        return;
-    }
-
-    if(data.session){
-        uygulamayiAc();
-    }
-}
-
-const {error} =
-await client.auth.signInWithPassword({
-email,
-password
-});
-
-if(error){
-
-message.innerHTML =
-"❌ Giriş başarısız: "+error.message;
-
-return;
-}
-
-uygulamayiAc();
+    await uygulamayiAc();
 }
 
 
