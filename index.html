@@ -31,7 +31,17 @@ button{background:#1677ff;color:white;border:0;font-weight:bold;cursor:pointer}
 
 <h1>🧼 Parlak Clean</h1>
 <div class="subtitle">Halı & Koltuk Yıkama Müşteri Takip</div>
+<div id="resetBox" class="card hidden">
+    <h2>🔐 Yeni Şifre Belirle</h2>
 
+    <input id="newPassword" type="password" placeholder="Yeni şifre">
+
+    <input id="newPassword2" type="password" placeholder="Yeni şifre tekrar">
+
+    <button onclick="yeniSifreBelirle()">Şifreyi Kaydet</button>
+
+    <div id="resetMessage"></div>
+</div>
 <div id="loginBox" class="card">
 <h2>🔐 Giriş Yap</h2>
 
@@ -371,6 +381,74 @@ return String(text)
 
 }
 
+async function yeniSifreBelirle(){
+
+    const password =
+        document.getElementById("newPassword").value;
+
+    const password2 =
+        document.getElementById("newPassword2").value;
+
+    const message =
+        document.getElementById("resetMessage");
+
+    if(password.length < 6){
+        message.innerHTML =
+            "⚠️ Şifre en az 6 karakter olmalı.";
+        return;
+    }
+
+    if(password !== password2){
+        message.innerHTML =
+            "⚠️ Şifreler aynı değil.";
+        return;
+    }
+
+    const { error } =
+        await client.auth.updateUser({
+            password: password
+        });
+
+    if(error){
+        message.innerHTML =
+            "❌ Şifre değiştirilemedi: " + error.message;
+        return;
+    }
+
+    message.innerHTML =
+        "✅ Şifren başarıyla değiştirildi!";
+
+    document.getElementById("newPassword").value = "";
+    document.getElementById("newPassword2").value = "";
+
+    setTimeout(() => {
+        uygulamayiAc();
+    }, 1000);
+}
+
+async function oturumKontrol(){
+
+    const {data} =
+        await client.auth.getSession();
+
+    const hash =
+        window.location.hash;
+
+    if(hash.includes("type=recovery")){
+
+        document.getElementById("loginBox")
+            .classList.add("hidden");
+
+        document.getElementById("resetBox")
+            .classList.remove("hidden");
+
+        return;
+    }
+
+    if(data.session){
+        uygulamayiAc();
+    }
+}
 
 oturumKontrol();
 
