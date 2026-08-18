@@ -1,9 +1,8 @@
-```html
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
+/* =====================================================
+   PARLAK CLEAN - SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
 "https://ynbcnhsipsktgrnqidfa.supabase.co";
@@ -24,14 +23,13 @@ const client = window.supabase.createClient(
 );
 
 
-/* =========================
+/* =====================================================
    SAYFA
-========================= */
+===================================================== */
 
 function sayfaAc(pageId, navId){
 
-    document.querySelectorAll(".page")
-    .forEach(function(page){
+    document.querySelectorAll(".page").forEach(function(page){
         page.classList.remove("active");
     });
 
@@ -41,8 +39,7 @@ function sayfaAc(pageId, navId){
         page.classList.add("active");
     }
 
-    document.querySelectorAll(".nav-btn")
-    .forEach(function(btn){
+    document.querySelectorAll(".nav-btn").forEach(function(btn){
         btn.classList.remove("active");
     });
 
@@ -56,9 +53,9 @@ function sayfaAc(pageId, navId){
 }
 
 
-/* =========================
+/* =====================================================
    FORM
-========================= */
+===================================================== */
 
 function musteriFormAc(){
 
@@ -67,97 +64,243 @@ function musteriFormAc(){
         "navCustomers"
     );
 
-    document
-    .getElementById("formBox")
-    .classList.remove("hidden");
+    const form =
+        document.getElementById("formBox");
+
+    if(form){
+        form.classList.remove("hidden");
+    }
 }
 
 
 function formKapat(){
 
-    document
-    .getElementById("formBox")
-    .classList.add("hidden");
+    const form =
+        document.getElementById("formBox");
 
-    document
-    .getElementById("saveMessage")
-    .innerHTML = "";
+    if(form){
+        form.classList.add("hidden");
+    }
+
+    const msg =
+        document.getElementById("saveMessage");
+
+    if(msg){
+        msg.innerHTML = "";
+    }
 }
 
 
-/* =========================
+/* =====================================================
    GÜVENLİ METİN
-========================= */
+===================================================== */
 
 function guvenli(text){
 
     return String(text ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 
-/* =========================
-   OTURUMU AL
-========================= */
+/* =====================================================
+   AKTİF OTURUM
+===================================================== */
 
 async function aktifOturumuAl(){
 
-    const {
+    console.log("Supabase oturum kontrolü başladı...");
+
+
+    /* 1 - Normal session kontrolü */
+
+    let {
         data,
         error
     } = await client.auth.getSession();
 
+
     if(error){
 
         console.error(
-            "Session hatası:",
+            "getSession hatası:",
             error
+        );
+
+    }
+
+
+    let session =
+        data?.session || null;
+
+
+    /* 2 - Session yoksa refresh dene */
+
+    if(!session){
+
+        console.log(
+            "Session bulunamadı. Refresh deneniyor..."
+        );
+
+
+        const refresh =
+            await client.auth.refreshSession();
+
+
+        if(
+            !refresh.error &&
+            refresh.data?.session
+        ){
+
+            session =
+                refresh.data.session;
+
+        }
+
+    }
+
+
+    /* 3 - Hâlâ yoksa çık */
+
+    if(!session){
+
+        console.warn(
+            "Geçerli Supabase oturumu bulunamadı."
         );
 
         return null;
     }
 
-    return data.session || null;
+
+    /* 4 - Token gerçekten geçerli mi kontrol et */
+
+    const {
+        data: userData,
+        error: userError
+    } = await client.auth.getUser(
+        session.access_token
+    );
+
+
+    if(
+        !userError &&
+        userData?.user
+    ){
+
+        console.log(
+            "Aktif kullanıcı:",
+            userData.user.id
+        );
+
+        return {
+            session: session,
+            user: userData.user
+        };
+
+    }
+
+
+    /* 5 - İlk doğrulama başarısızsa token yenile */
+
+    console.warn(
+        "Mevcut token doğrulanamadı. Oturum yenileniyor..."
+    );
+
+
+    const refreshed =
+        await client.auth.refreshSession();
+
+
+    if(
+        refreshed.error ||
+        !refreshed.data?.session
+    ){
+
+        console.error(
+            "Oturum yenilenemedi:",
+            refreshed.error
+        );
+
+        return null;
+    }
+
+
+    const yeniSession =
+        refreshed.data.session;
+
+
+    const {
+        data: yeniUserData,
+        error: yeniUserError
+    } =
+    await client.auth.getUser(
+        yeniSession.access_token
+    );
+
+
+    if(
+        yeniUserError ||
+        !yeniUserData?.user
+    ){
+
+        console.error(
+            "Yeni oturum doğrulanamadı:",
+            yeniUserError
+        );
+
+        return null;
+    }
+
+
+    console.log(
+        "Oturum başarıyla yenilendi:",
+        yeniUserData.user.id
+    );
+
+
+    return {
+        session: yeniSession,
+        user: yeniUserData.user
+    };
 }
 
 
-/* =========================
+/* =====================================================
    MÜŞTERİ KAYDET
-========================= */
+===================================================== */
 
 async function musteriKaydet(){
 
     const ad =
         document.getElementById("adSoyad")
-        .value.trim();
+        ?.value.trim() || "";
 
     const telefon =
         document.getElementById("telefon")
-        .value.trim();
+        ?.value.trim() || "";
 
     const adres =
         document.getElementById("adres")
-        .value.trim();
+        ?.value.trim() || "";
 
     const alim =
         document.getElementById("alimTarihi")
-        .value || null;
+        ?.value || null;
 
     const teslim =
         document.getElementById("teslimTarihi")
-        .value || null;
+        ?.value || null;
 
     const m2Value =
         document.getElementById("haliM2")
-        .value;
+        ?.value || "";
 
     const tutarValue =
         document.getElementById("tutar")
-        .value;
+        ?.value || "";
 
     const m2 =
         m2Value !== ""
@@ -171,10 +314,10 @@ async function musteriKaydet(){
 
     const notlar =
         document.getElementById("notlar")
-        .value.trim();
+        ?.value.trim() || "";
 
 
-    /* AD KONTROLÜ */
+    /* AD KONTROL */
 
     if(!ad){
 
@@ -188,60 +331,44 @@ async function musteriKaydet(){
     }
 
 
-    /* =========================
-       OTURUMU GETİR
-    ========================= */
+    /* MESAJ */
 
-    const session =
+    document.getElementById("saveMessage")
+    .innerHTML =
+    '<div class="message">' +
+    '⏳ Oturum kontrol ediliyor...' +
+    '</div>';
+
+
+    /* OTURUM */
+
+    const aktif =
         await aktifOturumuAl();
 
 
-    if(!session){
+    if(!aktif){
 
         document.getElementById("saveMessage")
         .innerHTML =
         '<div class="message error">' +
-        '❌ Oturum bulunamadı. Sayfayı yenileyip tekrar giriş yap.' +
+        '❌ Oturum geçerli değil. Lütfen çıkış yapıp tekrar giriş yap.' +
         '</div>';
-
-        console.error(
-            "Supabase session bulunamadı."
-        );
 
         return;
     }
 
-
-    /* =========================
-       USER ID
-       getUser() KULLANMIYORUZ
-    ========================= */
 
     const user =
-        session.user;
-
-
-    if(!user || !user.id){
-
-        document.getElementById("saveMessage")
-        .innerHTML =
-        '<div class="message error">' +
-        '❌ Kullanıcı bilgisi bulunamadı.' +
-        '</div>';
-
-        return;
-    }
+        aktif.user;
 
 
     console.log(
-        "Aktif kullanıcı:",
+        "Kayıt yapılacak kullanıcı:",
         user.id
     );
 
 
-    /* =========================
-       KAYIT
-    ========================= */
+    /* KAYIT */
 
     const kayit = {
 
@@ -291,6 +418,7 @@ async function musteriKaydet(){
             error
         );
 
+
         document.getElementById("saveMessage")
         .innerHTML =
         '<div class="message error">' +
@@ -317,42 +445,56 @@ async function musteriKaydet(){
 
     formTemizle();
 
+
     await musterileriGetir();
 
 }
 
 
-/* =========================
+/* =====================================================
    FORM TEMİZLE
-========================= */
+===================================================== */
 
 function formTemizle(){
 
-    document.getElementById("adSoyad").value = "";
-    document.getElementById("telefon").value = "";
-    document.getElementById("adres").value = "";
-    document.getElementById("alimTarihi").value = "";
-    document.getElementById("teslimTarihi").value = "";
-    document.getElementById("haliM2").value = "";
-    document.getElementById("tutar").value = "";
-    document.getElementById("notlar").value = "";
+    const alanlar = [
+        "adSoyad",
+        "telefon",
+        "adres",
+        "alimTarihi",
+        "teslimTarihi",
+        "haliM2",
+        "tutar",
+        "notlar"
+    ];
+
+    alanlar.forEach(function(id){
+
+        const el =
+            document.getElementById(id);
+
+        if(el){
+            el.value = "";
+        }
+
+    });
 }
 
 
-/* =========================
+/* =====================================================
    MÜŞTERİLERİ GETİR
-========================= */
+===================================================== */
 
 async function musterileriGetir(){
 
-    const session =
+    const aktif =
         await aktifOturumuAl();
 
 
-    if(!session){
+    if(!aktif){
 
         console.warn(
-            "Müşteri listesi için session yok."
+            "Müşteriler için geçerli oturum yok."
         );
 
         return;
@@ -381,12 +523,22 @@ async function musterileriGetir(){
             error
         );
 
-        document.getElementById("musteriListesi")
-        .innerHTML =
-        '<div class="message error">' +
-        '❌ Veriler alınamadı:<br>' +
-        guvenli(error.message) +
-        '</div>';
+
+        const liste =
+            document.getElementById(
+                "musteriListesi"
+            );
+
+
+        if(liste){
+
+            liste.innerHTML =
+            '<div class="message error">' +
+            '❌ Veriler alınamadı:<br>' +
+            guvenli(error.message) +
+            '</div>';
+
+        }
 
         return;
     }
@@ -396,9 +548,7 @@ async function musterileriGetir(){
         data || [];
 
 
-    /* =========================
-       MÜŞTERİ ARAMA
-    ========================= */
+    /* ARAMA */
 
     const arama =
         (
@@ -433,9 +583,7 @@ async function musterileriGetir(){
         });
 
 
-    /* =========================
-       TOPLAM HESAPLAR
-    ========================= */
+    /* TOPLAM */
 
     const toplamM2 =
         musteriler.reduce(
@@ -461,128 +609,174 @@ async function musterileriGetir(){
         );
 
 
-    document.getElementById("toplamMusteri")
-    .textContent =
-        musteriler.length;
+    const elToplamMusteri =
+        document.getElementById(
+            "toplamMusteri"
+        );
+
+    if(elToplamMusteri){
+        elToplamMusteri.textContent =
+            musteriler.length;
+    }
 
 
-    document.getElementById("toplamIs")
-    .textContent =
-        musteriler.length;
+    const elToplamIs =
+        document.getElementById(
+            "toplamIs"
+        );
+
+    if(elToplamIs){
+        elToplamIs.textContent =
+            musteriler.length;
+    }
 
 
-    document.getElementById("toplamM2")
-    .textContent =
-        toplamM2.toLocaleString("tr-TR");
+    const elToplamM2 =
+        document.getElementById(
+            "toplamM2"
+        );
+
+    if(elToplamM2){
+        elToplamM2.textContent =
+            toplamM2.toLocaleString(
+                "tr-TR"
+            );
+    }
 
 
-    document.getElementById("toplamTutar")
-    .textContent =
-        toplamTutar.toLocaleString("tr-TR")
-        + " TL";
+    const elToplamTutar =
+        document.getElementById(
+            "toplamTutar"
+        );
+
+    if(elToplamTutar){
+        elToplamTutar.textContent =
+            toplamTutar.toLocaleString(
+                "tr-TR"
+            ) + " TL";
+    }
 
 
-    document.getElementById("kasaToplam")
-    .textContent =
-        toplamTutar.toLocaleString("tr-TR")
-        + " TL";
+    const elKasaToplam =
+        document.getElementById(
+            "kasaToplam"
+        );
+
+    if(elKasaToplam){
+        elKasaToplam.textContent =
+            toplamTutar.toLocaleString(
+                "tr-TR"
+            ) + " TL";
+    }
 
 
-    document.getElementById("kasaM2")
-    .textContent =
-        toplamM2.toLocaleString("tr-TR");
+    const elKasaM2 =
+        document.getElementById(
+            "kasaM2"
+        );
+
+    if(elKasaM2){
+        elKasaM2.textContent =
+            toplamM2.toLocaleString(
+                "tr-TR"
+            );
+    }
 
 
-    /* =========================
-       MÜŞTERİ LİSTESİ
-    ========================= */
+    /* MÜŞTERİ LİSTESİ */
 
-    if(!filtreli.length){
+    const liste =
+        document.getElementById(
+            "musteriListesi"
+        );
 
-        document.getElementById("musteriListesi")
-        .innerHTML =
-        '<div class="empty">' +
-        '👥 Henüz müşteri kaydı yok.' +
-        '</div>';
 
-    }else{
+    if(liste){
 
-        document.getElementById("musteriListesi")
-        .innerHTML =
+        if(!filtreli.length){
 
-        filtreli.map(function(m){
+            liste.innerHTML =
+            '<div class="empty">' +
+            '👥 Henüz müşteri kaydı yok.' +
+            '</div>';
 
-            return `
+        }else{
 
-            <div class="customer">
+            liste.innerHTML =
 
-                <div class="customer-name">
-                    ${guvenli(m.ad_soyad)}
+            filtreli.map(function(m){
+
+                return `
+
+                <div class="customer">
+
+                    <div class="customer-name">
+                        ${guvenli(m.ad_soyad)}
+                    </div>
+
+                    <div class="customer-phone">
+                        📞 ${guvenli(m.telefon || "-")}
+                    </div>
+
+                    <div class="customer-info">
+
+                        📍 ${guvenli(m.adres || "-")}<br>
+
+                        📅 Alım:
+                        ${guvenli(m.alim_tarihi || "-")}<br>
+
+                        🚚 Teslim:
+                        ${guvenli(m.teslim_tarihi || "-")}<br>
+
+                        🧼 ${m.hali_m2 ?? 0} m²
+                        &nbsp; • &nbsp;
+                        💰 ${m.tutar ?? 0} TL
+
+                        ${
+                            m.notlar
+                            ?
+                            "<br>📝 " +
+                            guvenli(m.notlar)
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                    <div class="actions">
+
+                        <button
+                            class="action"
+                            onclick="ara('${telefonJS(m.telefon)}')">
+                            📞 Ara
+                        </button>
+
+                        <button
+                            class="action green"
+                            onclick="whatsapp('${telefonJS(m.telefon)}')">
+                            💬 WhatsApp
+                        </button>
+
+                        <button
+                            class="action red"
+                            onclick="musteriSil('${m.id}')">
+                            🗑️ Sil
+                        </button>
+
+                    </div>
+
                 </div>
 
-                <div class="customer-phone">
-                    📞 ${guvenli(m.telefon || "-")}
-                </div>
+                `;
 
-                <div class="customer-info">
+            }).join("");
 
-                    📍 ${guvenli(m.adres || "-")}<br>
-
-                    📅 Alım:
-                    ${guvenli(m.alim_tarihi || "-")}<br>
-
-                    🚚 Teslim:
-                    ${guvenli(m.teslim_tarihi || "-")}<br>
-
-                    🧼 ${m.hali_m2 ?? 0} m²
-                    &nbsp; • &nbsp;
-                    💰 ${m.tutar ?? 0} TL
-
-                    ${
-                        m.notlar
-                        ?
-                        "<br>📝 " +
-                        guvenli(m.notlar)
-                        :
-                        ""
-                    }
-
-                </div>
-
-                <div class="actions">
-
-                    <button
-                        class="action"
-                        onclick="ara('${telefonJS(m.telefon)}')">
-                        📞 Ara
-                    </button>
-
-                    <button
-                        class="action green"
-                        onclick="whatsapp('${telefonJS(m.telefon)}')">
-                        💬 WhatsApp
-                    </button>
-
-                    <button
-                        class="action red"
-                        onclick="musteriSil('${m.id}')">
-                        🗑️ Sil
-                    </button>
-
-                </div>
-
-            </div>
-
-            `;
-
-        }).join("");
+        }
 
     }
 
 
-    /* =========================
-       İŞLER
-    ========================= */
+    /* İŞLER */
 
     const isArama =
         (
@@ -617,95 +811,108 @@ async function musterileriGetir(){
         });
 
 
-    document.getElementById("islerListesi")
-    .innerHTML =
-
-        isler.length
-
-        ?
-
-        isler.map(function(m){
-
-            return `
-
-            <div class="customer">
-
-                <div class="customer-name">
-                    ${guvenli(m.ad_soyad)}
-                </div>
-
-                <div class="customer-info">
-
-                    📅 Alım:
-                    ${guvenli(m.alim_tarihi || "-")}<br>
-
-                    🚚 Teslim:
-                    ${guvenli(m.teslim_tarihi || "-")}<br>
-
-                    🧼 ${m.hali_m2 ?? 0} m²
-                    &nbsp; • &nbsp;
-                    💰 ${m.tutar ?? 0} TL
-
-                </div>
-
-            </div>
-
-            `;
-
-        }).join("")
-
-        :
-
-        '<div class="empty">İş bulunamadı.</div>';
+    const islerListesi =
+        document.getElementById(
+            "islerListesi"
+        );
 
 
-    /* =========================
-       KASA
-    ========================= */
+    if(islerListesi){
 
-    document.getElementById("kasaListe")
-    .innerHTML =
+        islerListesi.innerHTML =
 
-        musteriler.length
+            isler.length
 
-        ?
+            ?
 
-        musteriler
-        .slice(0,10)
-        .map(function(m){
+            isler.map(function(m){
 
-            return `
+                return `
 
-            <div class="customer">
+                <div class="customer">
 
-                <div class="customer-name">
-                    ${guvenli(m.ad_soyad)}
-                </div>
+                    <div class="customer-name">
+                        ${guvenli(m.ad_soyad)}
+                    </div>
 
-                <div class="customer-info">
+                    <div class="customer-info">
 
-                    💰 ${m.tutar ?? 0} TL<br>
+                        📅 Alım:
+                        ${guvenli(m.alim_tarihi || "-")}<br>
 
-                    🧼 ${m.hali_m2 ?? 0} m²
+                        🚚 Teslim:
+                        ${guvenli(m.teslim_tarihi || "-")}<br>
+
+                        🧼 ${m.hali_m2 ?? 0} m²
+                        &nbsp; • &nbsp;
+                        💰 ${m.tutar ?? 0} TL
+
+                    </div>
 
                 </div>
 
-            </div>
+                `;
 
-            `;
+            }).join("")
 
-        }).join("")
+            :
 
-        :
+            '<div class="empty">' +
+            'İş bulunamadı.' +
+            '</div>';
 
-        '<div class="empty">' +
-        'Henüz kayıt yok.' +
-        '</div>';
+    }
 
 
-    /* =========================
-       YAKLAŞAN TESLİMLER
-    ========================= */
+    /* KASA */
+
+    const kasaListe =
+        document.getElementById(
+            "kasaListe"
+        );
+
+
+    if(kasaListe){
+
+        kasaListe.innerHTML =
+
+            musteriler.length
+
+            ?
+
+            musteriler
+            .slice(0,10)
+            .map(function(m){
+
+                return `
+
+                <div class="customer">
+
+                    <div class="customer-name">
+                        ${guvenli(m.ad_soyad)}
+                    </div>
+
+                    <div class="customer-info">
+                        💰 ${m.tutar ?? 0} TL<br>
+                        🧼 ${m.hali_m2 ?? 0} m²
+                    </div>
+
+                </div>
+
+                `;
+
+            }).join("")
+
+            :
+
+            '<div class="empty">' +
+            'Henüz kayıt yok.' +
+            '</div>';
+
+    }
+
+
+    /* YAKLAŞAN TESLİMLER */
 
     const teslimler =
         musteriler
@@ -717,64 +924,73 @@ async function musterileriGetir(){
         .sort(function(a,b){
 
             return String(a.teslim_tarihi)
-            .localeCompare(
-                String(b.teslim_tarihi)
-            );
+                .localeCompare(
+                    String(b.teslim_tarihi)
+                );
 
         })
         .slice(0,5);
 
 
-    document.getElementById("yaklasanIsler")
-    .innerHTML =
+    const yaklasan =
+        document.getElementById(
+            "yaklasanIsler"
+        );
 
-        teslimler.length
 
-        ?
+    if(yaklasan){
 
-        teslimler.map(function(m){
+        yaklasan.innerHTML =
 
-            return `
+            teslimler.length
 
-            <div class="customer">
+            ?
 
-                <div class="customer-name">
-                    ${guvenli(m.ad_soyad)}
+            teslimler.map(function(m){
+
+                return `
+
+                <div class="customer">
+
+                    <div class="customer-name">
+                        ${guvenli(m.ad_soyad)}
+                    </div>
+
+                    <div class="customer-info">
+
+                        🚚 Teslim:
+                        ${guvenli(m.teslim_tarihi)}<br>
+
+                        💰 ${m.tutar ?? 0} TL
+
+                    </div>
+
                 </div>
 
-                <div class="customer-info">
+                `;
 
-                    🚚 Teslim:
-                    ${guvenli(m.teslim_tarihi)}<br>
+            }).join("")
 
-                    💰 ${m.tutar ?? 0} TL
+            :
 
-                </div>
+            '<div class="empty">' +
+            'Yaklaşan teslimat yok.' +
+            '</div>';
 
-            </div>
-
-            `;
-
-        }).join("")
-
-        :
-
-        '<div class="empty">' +
-        'Yaklaşan teslimat yok.' +
-        '</div>';
+    }
 
 }
 
 
-/* =========================
+/* =====================================================
    TELEFON
-========================= */
+===================================================== */
 
 function telefonJS(text){
 
     return String(text || "")
-    .replace(/\\/g,"\\\\")
-    .replace(/'/g,"\\'");
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'");
 }
 
 
@@ -842,9 +1058,9 @@ function whatsapp(telefon){
 }
 
 
-/* =========================
+/* =====================================================
    MÜŞTERİ SİL
-========================= */
+===================================================== */
 
 async function musteriSil(id){
 
@@ -856,14 +1072,14 @@ async function musteriSil(id){
     }
 
 
-    const session =
+    const aktif =
         await aktifOturumuAl();
 
 
-    if(!session){
+    if(!aktif){
 
         alert(
-            "Oturum bulunamadı. Sayfayı yenile."
+            "Oturum bulunamadı. Lütfen tekrar giriş yap."
         );
 
         return;
@@ -899,15 +1115,14 @@ async function musteriSil(id){
 }
 
 
-/* =========================
+/* =====================================================
    TARİH
-========================= */
+===================================================== */
 
 function bugunGoster(){
 
     const tarih =
         new Date();
-
 
     const el =
         document.getElementById(
@@ -932,9 +1147,9 @@ function bugunGoster(){
 }
 
 
-/* =========================
+/* =====================================================
    UYGULAMAYI AÇ
-========================= */
+===================================================== */
 
 async function uygulamayiAc(){
 
@@ -944,26 +1159,78 @@ async function uygulamayiAc(){
 }
 
 
-/* =========================
+/* =====================================================
+   AUTH DEĞİŞİKLİĞİ
+===================================================== */
+
+client.auth.onAuthStateChange(
+    function(event, session){
+
+        console.log(
+            "Supabase Auth:",
+            event
+        );
+
+
+        /*
+         * Async işlemi doğrudan callback içinde
+         * çalıştırmıyoruz.
+         */
+
+        if(
+            event === "SIGNED_IN" ||
+            event === "INITIAL_SESSION" ||
+            event === "TOKEN_REFRESHED"
+        ){
+
+            if(session){
+
+                setTimeout(
+                    function(){
+
+                        uygulamayiAc();
+
+                    },
+                    0
+                );
+
+            }
+
+        }
+
+
+        if(event === "SIGNED_OUT"){
+
+            console.log(
+                "Kullanıcı çıkış yaptı."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    OTURUM KONTROL
-========================= */
+===================================================== */
 
 async function oturumKontrol(){
 
     console.log(
-        "Oturum kontrol ediliyor..."
+        "Parlak Clean başlatılıyor..."
     );
 
 
-    const session =
+    const aktif =
         await aktifOturumuAl();
 
 
-    if(session){
+    if(aktif){
 
         console.log(
-            "Oturum bulundu:",
-            session.user.id
+            "Oturum hazır:",
+            aktif.user.id
         );
 
 
@@ -972,73 +1239,62 @@ async function oturumKontrol(){
     }else{
 
         console.warn(
-            "Oturum yok."
+            "Geçerli oturum bulunamadı."
         );
 
-        const msg =
+        const liste =
             document.getElementById(
                 "musteriListesi"
             );
 
 
-        if(msg){
+        if(liste){
 
-            msg.innerHTML =
+            liste.innerHTML =
             '<div class="message error">' +
-            '❌ Oturum bulunamadı. Lütfen giriş yap.' +
+            '❌ Oturum bulunamadı.<br>' +
+            'Lütfen giriş ekranından tekrar giriş yap.' +
             '</div>';
 
         }
 
     }
+
 }
 
 
-/* =========================
+/* =====================================================
    ÇIKIŞ
-========================= */
+===================================================== */
 
 async function logout(){
 
+    const {
+        error
+    } =
     await client.auth.signOut();
+
+
+    if(error){
+
+        console.error(
+            "Çıkış hatası:",
+            error
+        );
+
+    }
+
 
     location.reload();
 }
 
 
-/* =========================
-   OTURUM DEĞİŞİKLİĞİNİ DİNLE
-========================= */
-
-client.auth.onAuthStateChange(
-    async function(event, session){
-
-        console.log(
-            "Auth:",
-            event
-        );
-
-
-        if(
-            event === "SIGNED_IN" &&
-            session
-        ){
-
-            await uygulamayiAc();
-
-        }
-
-    }
-);
-
-
-/* =========================
+/* =====================================================
    BAŞLAT
-========================= */
+===================================================== */
 
 bugunGoster();
 
 oturumKontrol();
 
 </script>
-```
