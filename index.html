@@ -341,7 +341,6 @@ label{
     </div>
 </header>
 
-
 <div class="container">
 
 <section id="pageHome" class="page active">
@@ -411,7 +410,6 @@ label{
 
 </section>
 
-
 <section id="pageJobs" class="page">
 
     <div class="section-title">📦 İşler</div>
@@ -433,7 +431,6 @@ label{
     </div>
 
 </section>
-
 
 <section id="pageCustomers" class="page">
 
@@ -509,7 +506,6 @@ label{
 
 </section>
 
-
 <section id="pageCash" class="page">
 
     <div class="section-title">💰 Kasa</div>
@@ -542,7 +538,6 @@ label{
 
 </section>
 
-
 <section id="pageMore" class="page">
 
     <div class="section-title">⚙️ Daha Fazla</div>
@@ -565,7 +560,6 @@ label{
 </section>
 
 </div>
-
 
 <nav class="bottom-nav">
 
@@ -604,7 +598,6 @@ label{
 </div>
 
 </nav>
-
 
 <script>
 
@@ -665,6 +658,10 @@ function musteriFormAc(){
     document
     .getElementById("formBox")
     .classList.remove("hidden");
+
+    document
+    .getElementById("saveMessage")
+    .innerHTML="";
 }
 
 
@@ -754,36 +751,58 @@ async function musteriKaydet(){
     }
 
 
-    /*
-       GİRİŞ YAPAN KULLANICIYI BUL
-    */
+    /* =========================
+       OTURUMU KONTROL ET
+       getUser() YERİNE getSession()
+    ========================= */
 
     const {
-        data: userData,
-        error: userError
-    } = await client.auth.getUser();
+        data: sessionData,
+        error: sessionError
+    } =
+    await client.auth.getSession();
 
 
-    if(userError || !userData.user){
+    if(
+        sessionError ||
+        !sessionData ||
+        !sessionData.session
+    ){
 
         document.getElementById("saveMessage")
         .innerHTML =
         '<div class="message error">' +
-        '❌ Oturum bulunamadı. Lütfen tekrar giriş yap.' +
+        '❌ Oturum bulunamadı. Sayfayı yenileyip tekrar giriş yap.' +
         '</div>';
+
+        console.error(
+            "Oturum hatası:",
+            sessionError
+        );
 
         return;
     }
 
 
     const user =
-        userData.user;
+        sessionData.session.user;
 
 
-    /*
-       user_id EKLENİYOR
-       RLS HATASININ ÇÖZÜMÜ
-    */
+    if(!user || !user.id){
+
+        document.getElementById("saveMessage")
+        .innerHTML =
+        '<div class="message error">' +
+        '❌ Kullanıcı bilgisi alınamadı. Tekrar giriş yap.' +
+        '</div>';
+
+        return;
+    }
+
+
+    /* =========================
+       KAYIT
+    ========================= */
 
     const kayit = {
 
@@ -879,12 +898,40 @@ function formTemizle(){
 async function musterileriGetir(){
 
     const {
+        data: sessionData,
+        error: sessionError
+    } =
+    await client.auth.getSession();
+
+
+    if(
+        sessionError ||
+        !sessionData ||
+        !sessionData.session
+    ){
+
+        document.getElementById("musteriListesi")
+        .innerHTML =
+        '<div class="message error">' +
+        '❌ Oturum bulunamadı. Lütfen tekrar giriş yap.' +
+        '</div>';
+
+        return;
+    }
+
+
+    const user =
+        sessionData.session.user;
+
+
+    const {
         data,
         error
     } =
     await client
     .from("Müşteriler")
     .select("*")
+    .eq("user_id", user.id)
     .order(
         "created_at",
         {ascending:false}
@@ -899,6 +946,11 @@ async function musterileriGetir(){
         '❌ Veriler alınamadı: ' +
         guvenli(error.message) +
         '</div>';
+
+        console.error(
+            "Müşteri getirme hatası:",
+            error
+        );
 
         return;
     }
@@ -1065,7 +1117,9 @@ async function musterileriGetir(){
     }
 
 
-    /* İŞLER */
+    /* =========================
+       İŞLER
+    ========================= */
 
     const isArama =
         (
@@ -1136,7 +1190,9 @@ async function musterileriGetir(){
         '<div class="empty">İş bulunamadı.</div>';
 
 
-    /* KASA */
+    /* =========================
+       KASA
+    ========================= */
 
     document.getElementById("kasaListe")
     .innerHTML =
@@ -1172,7 +1228,9 @@ async function musterileriGetir(){
         '<div class="empty">Henüz kayıt yok.</div>';
 
 
-    /* YAKLAŞAN TESLİMLER */
+    /* =========================
+       YAKLAŞAN TESLİMLER
+    ========================= */
 
     const teslimler =
         musteriler
@@ -1306,11 +1364,37 @@ async function musteriSil(id){
     }
 
 
+    const {
+        data: sessionData,
+        error: sessionError
+    } =
+    await client.auth.getSession();
+
+
+    if(
+        sessionError ||
+        !sessionData ||
+        !sessionData.session
+    ){
+
+        alert(
+            "Oturum bulunamadı. Tekrar giriş yap."
+        );
+
+        return;
+    }
+
+
+    const user =
+        sessionData.session.user;
+
+
     const {error} =
         await client
         .from("Müşteriler")
         .delete()
-        .eq("id",id);
+        .eq("id",id)
+        .eq("user_id",user.id);
 
 
     if(error){
@@ -1368,12 +1452,33 @@ async function uygulamayiAc(){
 
 async function oturumKontrol(){
 
-    const {data} =
-        await client.auth.getSession();
+    const {
+        data,
+        error
+    } =
+    await client.auth.getSession();
 
-    if(data.session){
+
+    if(error){
+
+        console.error(
+            "Oturum kontrol hatası:",
+            error
+        );
+
+        return;
+    }
+
+
+    if(data && data.session){
 
         await uygulamayiAc();
+
+    }else{
+
+        console.warn(
+            "Aktif Supabase oturumu bulunamadı."
+        );
 
     }
 }
@@ -1385,6 +1490,29 @@ async function logout(){
 
     location.reload();
 }
+
+
+/* =========================
+   SUPABASE OTURUM DEĞİŞİKLİĞİ
+========================= */
+
+client.auth.onAuthStateChange(
+    async function(event, session){
+
+        console.log(
+            "Auth:",
+            event,
+            session
+        );
+
+        if(session){
+
+            await uygulamayiAc();
+
+        }
+
+    }
+);
 
 
 /* =========================
