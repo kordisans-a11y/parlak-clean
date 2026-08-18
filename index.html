@@ -1,604 +1,4 @@
 ```html
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parlak Clean</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    background:#f5f7fb;
-    color:#172033;
-    font-family:Arial,Helvetica,sans-serif;
-}
-
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-
-.top-header{
-    background:linear-gradient(135deg,#1677ff,#0757c9);
-    color:white;
-    padding:22px 18px 28px;
-    border-radius:0 0 28px 28px;
-}
-
-.top-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.brand{
-    font-size:23px;
-    font-weight:800;
-}
-
-.brand-sub{
-    font-size:13px;
-    opacity:.85;
-    margin-top:4px;
-}
-
-.logout{
-    border:1px solid rgba(255,255,255,.35);
-    background:rgba(255,255,255,.15);
-    color:white;
-    padding:9px 13px;
-    border-radius:10px;
-}
-
-.container{
-    max-width:900px;
-    margin:auto;
-    padding:15px;
-    padding-bottom:95px;
-}
-
-.welcome{
-    font-size:25px;
-    font-weight:800;
-    margin-top:18px;
-}
-
-.date-text{
-    color:#7b8494;
-    margin-top:5px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    margin-top:18px;
-}
-
-.stat{
-    background:white;
-    border:1px solid #e7ebf2;
-    border-radius:17px;
-    padding:14px;
-}
-
-.stat-icon{font-size:22px}
-
-.stat-label{
-    color:#7b8494;
-    font-size:12px;
-    margin-top:6px;
-}
-
-.stat-value{
-    font-size:19px;
-    font-weight:800;
-    margin-top:4px;
-}
-
-.section-title{
-    font-size:19px;
-    font-weight:800;
-    margin:24px 0 12px;
-}
-
-.quick-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-}
-
-.quick{
-    border:1px solid #e7ebf2;
-    background:white;
-    border-radius:17px;
-    padding:16px 8px;
-}
-
-.quick-icon{font-size:27px}
-
-.quick-text{
-    margin-top:7px;
-    font-weight:bold;
-    font-size:13px;
-}
-
-.card{
-    background:white;
-    border:1px solid #e7ebf2;
-    border-radius:18px;
-    padding:17px;
-    margin-top:15px;
-}
-
-.card h2{
-    margin:0 0 15px;
-}
-
-input,textarea{
-    width:100%;
-    padding:13px;
-    margin-top:8px;
-    margin-bottom:7px;
-    border:1px solid #dce1e9;
-    border-radius:11px;
-    outline:none;
-    background:white;
-}
-
-textarea{
-    min-height:90px;
-    resize:vertical;
-}
-
-label{
-    display:block;
-    color:#606a7a;
-    font-size:12px;
-    font-weight:bold;
-    margin-top:8px;
-}
-
-.primary{
-    width:100%;
-    border:0;
-    background:#1677ff;
-    color:white;
-    padding:14px;
-    border-radius:11px;
-    font-weight:bold;
-    margin-top:8px;
-}
-
-.secondary{
-    width:100%;
-    border:0;
-    background:#edf0f4;
-    color:#333;
-    padding:13px;
-    border-radius:11px;
-    margin-top:8px;
-}
-
-.search{position:relative}
-
-.search input{padding-left:42px}
-
-.search-icon{
-    position:absolute;
-    left:14px;
-    top:19px;
-}
-
-.customer{
-    padding:16px 0;
-    border-bottom:1px solid #e7ebf2;
-}
-
-.customer:last-child{border-bottom:0}
-
-.customer-name{
-    font-size:17px;
-    font-weight:800;
-}
-
-.customer-phone{
-    color:#1677ff;
-    margin-top:5px;
-}
-
-.customer-info{
-    color:#606a7a;
-    font-size:14px;
-    line-height:1.7;
-    margin-top:8px;
-}
-
-.actions{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-    margin-top:11px;
-}
-
-.action{
-    border:0;
-    border-radius:9px;
-    padding:10px 5px;
-    background:#edf4ff;
-    color:#1677ff;
-    font-weight:bold;
-    font-size:12px;
-}
-
-.action.green{
-    background:#e9f9f0;
-    color:#11874e;
-}
-
-.action.red{
-    background:#fff0f0;
-    color:#c83238;
-}
-
-.empty{
-    text-align:center;
-    color:#7b8494;
-    padding:25px 5px;
-}
-
-.message{
-    margin-top:10px;
-    padding:10px;
-    border-radius:10px;
-    font-size:14px;
-}
-
-.success{
-    background:#e9f9f0;
-    color:#08763e;
-}
-
-.error{
-    background:#fff0f0;
-    color:#b42318;
-}
-
-.page{display:none}
-.page.active{display:block}
-
-.bottom-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:72px;
-    background:white;
-    border-top:1px solid #e7ebf2;
-    box-shadow:0 -5px 20px rgba(0,0,0,.07);
-    z-index:100;
-}
-
-.nav-inner{
-    max-width:700px;
-    height:100%;
-    margin:auto;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-}
-
-.nav-btn{
-    border:0;
-    background:white;
-    color:#8992a2;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:4px;
-    font-size:11px;
-}
-
-.nav-btn .icon{font-size:20px}
-
-.nav-btn.active{
-    color:#1677ff;
-    font-weight:bold;
-}
-
-@media(max-width:700px){
-    .stats{grid-template-columns:repeat(2,1fr)}
-    .quick-grid{grid-template-columns:repeat(2,1fr)}
-}
-
-@media(max-width:430px){
-    .brand{font-size:20px}
-    .container{padding:12px}
-}
-</style>
-</head>
-
-<body>
-
-<div id="app">
-
-<header class="top-header">
-    <div class="top-row">
-
-        <div>
-            <div class="brand">🧼 PARLAK CLEAN</div>
-            <div class="brand-sub">Halı & Koltuk Yıkama</div>
-        </div>
-
-        <button class="logout" onclick="logout()">
-            Çıkış
-        </button>
-
-    </div>
-</header>
-
-<div class="container">
-
-<section id="pageHome" class="page active">
-
-    <div class="welcome">Hoş geldin 👋</div>
-
-    <div class="date-text" id="bugunTarihi"></div>
-
-    <div class="stats">
-
-        <div class="stat">
-            <div class="stat-icon">👥</div>
-            <div class="stat-label">Toplam Müşteri</div>
-            <div class="stat-value" id="toplamMusteri">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-icon">🧼</div>
-            <div class="stat-label">Toplam M²</div>
-            <div class="stat-value" id="toplamM2">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-icon">💰</div>
-            <div class="stat-label">Toplam Tutar</div>
-            <div class="stat-value" id="toplamTutar">0 TL</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-icon">📦</div>
-            <div class="stat-label">Toplam İş</div>
-            <div class="stat-value" id="toplamIs">0</div>
-        </div>
-
-    </div>
-
-    <div class="section-title">Hızlı İşlemler</div>
-
-    <div class="quick-grid">
-
-        <button class="quick" onclick="musteriFormAc()">
-            <div class="quick-icon">👤</div>
-            <div class="quick-text">Yeni Müşteri</div>
-        </button>
-
-        <button class="quick" onclick="musteriFormAc()">
-            <div class="quick-icon">➕</div>
-            <div class="quick-text">Yeni İş</div>
-        </button>
-
-        <button class="quick" onclick="sayfaAc('pageCustomers','navCustomers')">
-            <div class="quick-icon">🔎</div>
-            <div class="quick-text">Müşteri Ara</div>
-        </button>
-
-        <button class="quick" onclick="sayfaAc('pageCash','navCash')">
-            <div class="quick-icon">💰</div>
-            <div class="quick-text">Kasa</div>
-        </button>
-
-    </div>
-
-    <div class="card">
-        <h2>📅 Yaklaşan Teslimatlar</h2>
-        <div id="yaklasanIsler">Yükleniyor...</div>
-    </div>
-
-</section>
-
-<section id="pageJobs" class="page">
-
-    <div class="section-title">📦 İşler</div>
-
-    <div class="card">
-
-        <div class="search">
-            <span class="search-icon">🔎</span>
-
-            <input
-                id="isArama"
-                placeholder="Müşteri veya telefon ara..."
-                oninput="musterileriGetir()"
-            >
-        </div>
-
-        <div id="islerListesi">Yükleniyor...</div>
-
-    </div>
-
-</section>
-
-<section id="pageCustomers" class="page">
-
-    <div class="section-title">👥 Müşteriler</div>
-
-    <button class="primary" onclick="musteriFormAc()">
-        ➕ Yeni Müşteri Ekle
-    </button>
-
-    <div id="formBox" class="card hidden">
-
-        <h2>👤 Yeni Müşteri</h2>
-
-        <input id="adSoyad" placeholder="Ad Soyad">
-
-        <input id="telefon" type="tel" placeholder="Telefon">
-
-        <textarea id="adres" placeholder="Adres"></textarea>
-
-        <label>Alım Tarihi</label>
-        <input id="alimTarihi" type="date">
-
-        <label>Teslim Tarihi</label>
-        <input id="teslimTarihi" type="date">
-
-        <input
-            id="haliM2"
-            type="number"
-            step="0.1"
-            placeholder="Halı M²"
-        >
-
-        <input
-            id="tutar"
-            type="number"
-            step="0.01"
-            placeholder="Tutar (TL)"
-        >
-
-        <textarea id="notlar" placeholder="Notlar"></textarea>
-
-        <button class="primary" onclick="musteriKaydet()">
-            💾 Müşteriyi Kaydet
-        </button>
-
-        <button class="secondary" onclick="formKapat()">
-            Vazgeç
-        </button>
-
-        <div id="saveMessage"></div>
-
-    </div>
-
-    <div class="card">
-
-        <div class="search">
-
-            <span class="search-icon">🔎</span>
-
-            <input
-                id="arama"
-                placeholder="Ad, soyad veya telefon ara..."
-                oninput="musterileriGetir()"
-            >
-
-        </div>
-
-        <div id="musteriListesi">
-            Yükleniyor...
-        </div>
-
-    </div>
-
-</section>
-
-<section id="pageCash" class="page">
-
-    <div class="section-title">💰 Kasa</div>
-
-    <div class="stats">
-
-        <div class="stat">
-            <div class="stat-icon">💵</div>
-            <div class="stat-label">Toplam Tutar</div>
-            <div class="stat-value" id="kasaToplam">0 TL</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-icon">🧼</div>
-            <div class="stat-label">Toplam M²</div>
-            <div class="stat-value" id="kasaM2">0</div>
-        </div>
-
-    </div>
-
-    <div class="card">
-
-        <h2>Son İşler</h2>
-
-        <div id="kasaListe">
-            Yükleniyor...
-        </div>
-
-    </div>
-
-</section>
-
-<section id="pageMore" class="page">
-
-    <div class="section-title">⚙️ Daha Fazla</div>
-
-    <div class="card">
-        <h2>📊 Raporlar</h2>
-        <p>Günlük, haftalık ve aylık raporlar burada olacak.</p>
-    </div>
-
-    <div class="card">
-        <h2>📅 Takvim</h2>
-        <p>Alım ve teslim tarihlerini burada takip edeceğiz.</p>
-    </div>
-
-    <div class="card">
-        <h2>⚙️ Ayarlar</h2>
-        <p>İşletme ayarları burada olacak.</p>
-    </div>
-
-</section>
-
-</div>
-
-<nav class="bottom-nav">
-
-<div class="nav-inner">
-
-    <button id="navHome" class="nav-btn active"
-        onclick="sayfaAc('pageHome','navHome')">
-        <span class="icon">🏠</span>
-        Ana Sayfa
-    </button>
-
-    <button id="navJobs" class="nav-btn"
-        onclick="sayfaAc('pageJobs','navJobs')">
-        <span class="icon">📦</span>
-        İşler
-    </button>
-
-    <button id="navCustomers" class="nav-btn"
-        onclick="sayfaAc('pageCustomers','navCustomers')">
-        <span class="icon">👥</span>
-        Müşteriler
-    </button>
-
-    <button id="navCash" class="nav-btn"
-        onclick="sayfaAc('pageCash','navCash')">
-        <span class="icon">💰</span>
-        Kasa
-    </button>
-
-    <button id="navMore" class="nav-btn"
-        onclick="sayfaAc('pageMore','navMore')">
-        <span class="icon">☰</span>
-        Daha Fazla
-    </button>
-
-</div>
-
-</nav>
-
 <script>
 
 /* =========================
@@ -611,10 +11,16 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_SpfDVJZCd9Q7tP2Ic25hUQ_vJlnVic7";
 
-const client =
-window.supabase.createClient(
+const client = window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_KEY
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
 );
 
 
@@ -622,23 +28,29 @@ window.supabase.createClient(
    SAYFA
 ========================= */
 
-function sayfaAc(pageId,navId){
+function sayfaAc(pageId, navId){
 
     document.querySelectorAll(".page")
     .forEach(function(page){
         page.classList.remove("active");
     });
 
-    document.getElementById(pageId)
-    .classList.add("active");
+    const page = document.getElementById(pageId);
+
+    if(page){
+        page.classList.add("active");
+    }
 
     document.querySelectorAll(".nav-btn")
     .forEach(function(btn){
         btn.classList.remove("active");
     });
 
-    document.getElementById(navId)
-    .classList.add("active");
+    const nav = document.getElementById(navId);
+
+    if(nav){
+        nav.classList.add("active");
+    }
 
     window.scrollTo(0,0);
 }
@@ -658,10 +70,6 @@ function musteriFormAc(){
     document
     .getElementById("formBox")
     .classList.remove("hidden");
-
-    document
-    .getElementById("saveMessage")
-    .innerHTML="";
 }
 
 
@@ -670,6 +78,10 @@ function formKapat(){
     document
     .getElementById("formBox")
     .classList.add("hidden");
+
+    document
+    .getElementById("saveMessage")
+    .innerHTML = "";
 }
 
 
@@ -685,6 +97,31 @@ function guvenli(text){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+}
+
+
+/* =========================
+   OTURUMU AL
+========================= */
+
+async function aktifOturumuAl(){
+
+    const {
+        data,
+        error
+    } = await client.auth.getSession();
+
+    if(error){
+
+        console.error(
+            "Session hatası:",
+            error
+        );
+
+        return null;
+    }
+
+    return data.session || null;
 }
 
 
@@ -714,30 +151,30 @@ async function musteriKaydet(){
         document.getElementById("teslimTarihi")
         .value || null;
 
-    const m2 =
+    const m2Value =
         document.getElementById("haliM2")
-        .value
-        ?
-        Number(
-            document.getElementById("haliM2").value
-        )
-        :
-        null;
+        .value;
+
+    const tutarValue =
+        document.getElementById("tutar")
+        .value;
+
+    const m2 =
+        m2Value !== ""
+        ? Number(m2Value)
+        : null;
 
     const tutar =
-        document.getElementById("tutar")
-        .value
-        ?
-        Number(
-            document.getElementById("tutar").value
-        )
-        :
-        null;
+        tutarValue !== ""
+        ? Number(tutarValue)
+        : null;
 
     const notlar =
         document.getElementById("notlar")
         .value.trim();
 
+
+    /* AD KONTROLÜ */
 
     if(!ad){
 
@@ -752,22 +189,14 @@ async function musteriKaydet(){
 
 
     /* =========================
-       OTURUMU KONTROL ET
-       getUser() YERİNE getSession()
+       OTURUMU GETİR
     ========================= */
 
-    const {
-        data: sessionData,
-        error: sessionError
-    } =
-    await client.auth.getSession();
+    const session =
+        await aktifOturumuAl();
 
 
-    if(
-        sessionError ||
-        !sessionData ||
-        !sessionData.session
-    ){
+    if(!session){
 
         document.getElementById("saveMessage")
         .innerHTML =
@@ -776,16 +205,20 @@ async function musteriKaydet(){
         '</div>';
 
         console.error(
-            "Oturum hatası:",
-            sessionError
+            "Supabase session bulunamadı."
         );
 
         return;
     }
 
 
+    /* =========================
+       USER ID
+       getUser() KULLANMIYORUZ
+    ========================= */
+
     const user =
-        sessionData.session.user;
+        session.user;
 
 
     if(!user || !user.id){
@@ -793,11 +226,17 @@ async function musteriKaydet(){
         document.getElementById("saveMessage")
         .innerHTML =
         '<div class="message error">' +
-        '❌ Kullanıcı bilgisi alınamadı. Tekrar giriş yap.' +
+        '❌ Kullanıcı bilgisi bulunamadı.' +
         '</div>';
 
         return;
     }
+
+
+    console.log(
+        "Aktif kullanıcı:",
+        user.id
+    );
 
 
     /* =========================
@@ -835,29 +274,38 @@ async function musteriKaydet(){
 
 
     const {
+        data,
         error
     } =
     await client
     .from("Müşteriler")
-    .insert([kayit]);
+    .insert(kayit)
+    .select()
+    .single();
 
 
     if(error){
-
-        document.getElementById("saveMessage")
-        .innerHTML =
-        '<div class="message error">' +
-        '❌ Kayıt yapılamadı: ' +
-        guvenli(error.message) +
-        '</div>';
 
         console.error(
             "Müşteri kayıt hatası:",
             error
         );
 
+        document.getElementById("saveMessage")
+        .innerHTML =
+        '<div class="message error">' +
+        '❌ Kayıt yapılamadı:<br>' +
+        guvenli(error.message) +
+        '</div>';
+
         return;
     }
+
+
+    console.log(
+        "Kayıt başarılı:",
+        data
+    );
 
 
     document.getElementById("saveMessage")
@@ -880,14 +328,14 @@ async function musteriKaydet(){
 
 function formTemizle(){
 
-    document.getElementById("adSoyad").value="";
-    document.getElementById("telefon").value="";
-    document.getElementById("adres").value="";
-    document.getElementById("alimTarihi").value="";
-    document.getElementById("teslimTarihi").value="";
-    document.getElementById("haliM2").value="";
-    document.getElementById("tutar").value="";
-    document.getElementById("notlar").value="";
+    document.getElementById("adSoyad").value = "";
+    document.getElementById("telefon").value = "";
+    document.getElementById("adres").value = "";
+    document.getElementById("alimTarihi").value = "";
+    document.getElementById("teslimTarihi").value = "";
+    document.getElementById("haliM2").value = "";
+    document.getElementById("tutar").value = "";
+    document.getElementById("notlar").value = "";
 }
 
 
@@ -897,31 +345,18 @@ function formTemizle(){
 
 async function musterileriGetir(){
 
-    const {
-        data: sessionData,
-        error: sessionError
-    } =
-    await client.auth.getSession();
+    const session =
+        await aktifOturumuAl();
 
 
-    if(
-        sessionError ||
-        !sessionData ||
-        !sessionData.session
-    ){
+    if(!session){
 
-        document.getElementById("musteriListesi")
-        .innerHTML =
-        '<div class="message error">' +
-        '❌ Oturum bulunamadı. Lütfen tekrar giriş yap.' +
-        '</div>';
+        console.warn(
+            "Müşteri listesi için session yok."
+        );
 
         return;
     }
-
-
-    const user =
-        sessionData.session.user;
 
 
     const {
@@ -931,26 +366,27 @@ async function musterileriGetir(){
     await client
     .from("Müşteriler")
     .select("*")
-    .eq("user_id", user.id)
     .order(
         "created_at",
-        {ascending:false}
+        {
+            ascending:false
+        }
     );
 
 
     if(error){
 
+        console.error(
+            "Müşteriler alınamadı:",
+            error
+        );
+
         document.getElementById("musteriListesi")
         .innerHTML =
         '<div class="message error">' +
-        '❌ Veriler alınamadı: ' +
+        '❌ Veriler alınamadı:<br>' +
         guvenli(error.message) +
         '</div>';
-
-        console.error(
-            "Müşteri getirme hatası:",
-            error
-        );
 
         return;
     }
@@ -959,6 +395,10 @@ async function musterileriGetir(){
     const musteriler =
         data || [];
 
+
+    /* =========================
+       MÜŞTERİ ARAMA
+    ========================= */
 
     const arama =
         (
@@ -972,26 +412,38 @@ async function musterileriGetir(){
     const filtreli =
         musteriler.filter(function(m){
 
-            if(!arama) return true;
+            if(!arama){
+                return true;
+            }
 
             return (
+
                 String(m.ad_soyad || "")
                 .toLowerCase()
                 .includes(arama)
+
                 ||
+
                 String(m.telefon || "")
                 .toLowerCase()
                 .includes(arama)
+
             );
 
         });
 
 
+    /* =========================
+       TOPLAM HESAPLAR
+    ========================= */
+
     const toplamM2 =
         musteriler.reduce(
             function(toplam,m){
+
                 return toplam +
                 Number(m.hali_m2 || 0);
+
             },
             0
         );
@@ -1000,8 +452,10 @@ async function musterileriGetir(){
     const toplamTutar =
         musteriler.reduce(
             function(toplam,m){
+
                 return toplam +
                 Number(m.tutar || 0);
+
             },
             0
         );
@@ -1011,28 +465,37 @@ async function musterileriGetir(){
     .textContent =
         musteriler.length;
 
+
     document.getElementById("toplamIs")
     .textContent =
         musteriler.length;
 
+
     document.getElementById("toplamM2")
     .textContent =
         toplamM2.toLocaleString("tr-TR");
+
 
     document.getElementById("toplamTutar")
     .textContent =
         toplamTutar.toLocaleString("tr-TR")
         + " TL";
 
+
     document.getElementById("kasaToplam")
     .textContent =
         toplamTutar.toLocaleString("tr-TR")
         + " TL";
 
+
     document.getElementById("kasaM2")
     .textContent =
         toplamM2.toLocaleString("tr-TR");
 
+
+    /* =========================
+       MÜŞTERİ LİSTESİ
+    ========================= */
 
     if(!filtreli.length){
 
@@ -1133,16 +596,22 @@ async function musterileriGetir(){
     const isler =
         musteriler.filter(function(m){
 
-            if(!isArama) return true;
+            if(!isArama){
+                return true;
+            }
 
             return (
+
                 String(m.ad_soyad || "")
                 .toLowerCase()
                 .includes(isArama)
+
                 ||
+
                 String(m.telefon || "")
                 .toLowerCase()
                 .includes(isArama)
+
             );
 
         });
@@ -1201,7 +670,8 @@ async function musterileriGetir(){
 
         ?
 
-        musteriler.slice(0,10)
+        musteriler
+        .slice(0,10)
         .map(function(m){
 
             return `
@@ -1213,8 +683,11 @@ async function musterileriGetir(){
                 </div>
 
                 <div class="customer-info">
+
                     💰 ${m.tutar ?? 0} TL<br>
+
                     🧼 ${m.hali_m2 ?? 0} m²
+
                 </div>
 
             </div>
@@ -1225,7 +698,9 @@ async function musterileriGetir(){
 
         :
 
-        '<div class="empty">Henüz kayıt yok.</div>';
+        '<div class="empty">' +
+        'Henüz kayıt yok.' +
+        '</div>';
 
 
     /* =========================
@@ -1235,7 +710,9 @@ async function musterileriGetir(){
     const teslimler =
         musteriler
         .filter(function(m){
-            return m.teslim_tarihi;
+
+            return !!m.teslim_tarihi;
+
         })
         .sort(function(a,b){
 
@@ -1307,12 +784,16 @@ function ara(telefon){
         String(telefon)
         .replace(/\D/g,"");
 
+
     if(!temiz){
 
-        alert("Telefon numarası bulunamadı.");
-        return;
+        alert(
+            "Telefon numarası bulunamadı."
+        );
 
+        return;
     }
+
 
     location.href =
         "tel:" + temiz;
@@ -1324,6 +805,16 @@ function whatsapp(telefon){
     let temiz =
         String(telefon)
         .replace(/\D/g,"");
+
+
+    if(!temiz){
+
+        alert(
+            "Telefon numarası bulunamadı."
+        );
+
+        return;
+    }
 
 
     if(temiz.startsWith("0")){
@@ -1352,7 +843,7 @@ function whatsapp(telefon){
 
 
 /* =========================
-   SİL
+   MÜŞTERİ SİL
 ========================= */
 
 async function musteriSil(id){
@@ -1360,44 +851,40 @@ async function musteriSil(id){
     if(!confirm(
         "Bu müşteriyi silmek istediğine emin misin?"
     )){
+
         return;
     }
 
 
-    const {
-        data: sessionData,
-        error: sessionError
-    } =
-    await client.auth.getSession();
+    const session =
+        await aktifOturumuAl();
 
 
-    if(
-        sessionError ||
-        !sessionData ||
-        !sessionData.session
-    ){
+    if(!session){
 
         alert(
-            "Oturum bulunamadı. Tekrar giriş yap."
+            "Oturum bulunamadı. Sayfayı yenile."
         );
 
         return;
     }
 
 
-    const user =
-        sessionData.session.user;
-
-
-    const {error} =
-        await client
-        .from("Müşteriler")
-        .delete()
-        .eq("id",id)
-        .eq("user_id",user.id);
+    const {
+        error
+    } =
+    await client
+    .from("Müşteriler")
+    .delete()
+    .eq("id",id);
 
 
     if(error){
+
+        console.error(
+            "Silme hatası:",
+            error
+        );
 
         alert(
             "Silinemedi: " +
@@ -1418,31 +905,38 @@ async function musteriSil(id){
 
 function bugunGoster(){
 
-    const tarih = new Date();
+    const tarih =
+        new Date();
 
-    document.getElementById("bugunTarihi")
-    .textContent =
-        tarih.toLocaleDateString(
-            "tr-TR",
-            {
-                weekday:"long",
-                day:"numeric",
-                month:"long",
-                year:"numeric"
-            }
+
+    const el =
+        document.getElementById(
+            "bugunTarihi"
         );
+
+
+    if(el){
+
+        el.textContent =
+            tarih.toLocaleDateString(
+                "tr-TR",
+                {
+                    weekday:"long",
+                    day:"numeric",
+                    month:"long",
+                    year:"numeric"
+                }
+            );
+
+    }
 }
 
 
 /* =========================
-   OTURUM
+   UYGULAMAYI AÇ
 ========================= */
 
 async function uygulamayiAc(){
-
-    document
-    .getElementById("app")
-    .classList.remove("hidden");
 
     bugunGoster();
 
@@ -1450,39 +944,59 @@ async function uygulamayiAc(){
 }
 
 
+/* =========================
+   OTURUM KONTROL
+========================= */
+
 async function oturumKontrol(){
 
-    const {
-        data,
-        error
-    } =
-    await client.auth.getSession();
+    console.log(
+        "Oturum kontrol ediliyor..."
+    );
 
 
-    if(error){
+    const session =
+        await aktifOturumuAl();
 
-        console.error(
-            "Oturum kontrol hatası:",
-            error
+
+    if(session){
+
+        console.log(
+            "Oturum bulundu:",
+            session.user.id
         );
 
-        return;
-    }
-
-
-    if(data && data.session){
 
         await uygulamayiAc();
 
     }else{
 
         console.warn(
-            "Aktif Supabase oturumu bulunamadı."
+            "Oturum yok."
         );
+
+        const msg =
+            document.getElementById(
+                "musteriListesi"
+            );
+
+
+        if(msg){
+
+            msg.innerHTML =
+            '<div class="message error">' +
+            '❌ Oturum bulunamadı. Lütfen giriş yap.' +
+            '</div>';
+
+        }
 
     }
 }
 
+
+/* =========================
+   ÇIKIŞ
+========================= */
 
 async function logout(){
 
@@ -1493,7 +1007,7 @@ async function logout(){
 
 
 /* =========================
-   SUPABASE OTURUM DEĞİŞİKLİĞİ
+   OTURUM DEĞİŞİKLİĞİNİ DİNLE
 ========================= */
 
 client.auth.onAuthStateChange(
@@ -1501,11 +1015,14 @@ client.auth.onAuthStateChange(
 
         console.log(
             "Auth:",
-            event,
-            session
+            event
         );
 
-        if(session){
+
+        if(
+            event === "SIGNED_IN" &&
+            session
+        ){
 
             await uygulamayiAc();
 
@@ -1524,7 +1041,4 @@ bugunGoster();
 oturumKontrol();
 
 </script>
-
-</body>
-</html>
 ```
