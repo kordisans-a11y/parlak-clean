@@ -1,476 +1,378 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parlak Clean - Müşteri Takip</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parlak Clean - Müşteri Takip</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            color: #222;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #777;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 15px;
-            box-shadow: 0 3px 12px rgba(0,0,0,.08);
-        }
-
-        input, textarea, select, button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            margin-bottom: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        button {
-            background: #1677ff;
-            color: white;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #0d5fd1;
-        }
-
-        .danger {
-            background: #d93025;
-        }
-
-        .logout {
-            background: #555;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .customer {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 12px;
-        }
-
-        .customer strong {
-            font-size: 18px;
-        }
-
-        .status {
-            padding: 6px 10px;
-            border-radius: 20px;
-            display: inline-block;
-            background: #eee;
-            margin-top: 5px;
-        }
-
-        .message {
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background: #eef5ff;
-        }
-    </style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#222}
+.container{max-width:1000px;margin:auto;padding:20px}
+h1{text-align:center;margin-bottom:5px}
+.subtitle{text-align:center;color:#777;margin-bottom:20px}
+.card{background:#fff;padding:20px;margin-bottom:20px;border-radius:15px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+input,textarea,select,button{width:100%;padding:12px;margin-top:8px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;font-size:16px}
+textarea{min-height:90px}
+button{background:#1677ff;color:white;border:0;font-weight:bold;cursor:pointer}
+.logout{background:#555}
+.hidden{display:none}
+.customer{border:1px solid #ddd;border-radius:12px;padding:15px;margin-top:12px}
+.status{display:inline-block;padding:6px 10px;border-radius:20px;background:#eee;margin-top:5px}
+.message{padding:10px;border-radius:8px;margin-bottom:10px}
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>🧼 Parlak Clean</h1>
-    <div class="subtitle">Halı & Koltuk Yıkama Müşteri Takip</div>
+<h1>🧼 Parlak Clean</h1>
+<div class="subtitle">Halı & Koltuk Yıkama Müşteri Takip</div>
 
-    <!-- GİRİŞ -->
-    <div id="loginBox" class="card">
+<div id="loginBox" class="card">
+<h2>🔐 Giriş Yap</h2>
 
-        <h2>🔐 Giriş Yap</h2>
+<input id="email" type="email" placeholder="E-posta">
+<input id="password" type="password" placeholder="Şifre">
 
-        <input id="email" type="email" placeholder="E-posta">
+<button onclick="login()">Giriş Yap</button>
 
-        <input id="password" type="password" placeholder="Şifre">
-
-        <button onclick="login()">Giriş Yap</button>
-
-        <div id="loginMessage"></div>
-
-    </div>
+<div id="loginMessage"></div>
+</div>
 
 
-    <!-- UYGULAMA -->
-    <div id="app" class="hidden">
+<div id="app" class="hidden">
 
-        <div class="card">
+<div class="card">
+<button class="logout" onclick="logout()">Çıkış Yap</button>
 
-            <button class="logout" onclick="logout()">Çıkış Yap</button>
+<h2>➕ Müşteri Ekle</h2>
 
-            <h2>➕ Müşteri Ekle</h2>
+<input id="adSoyad" type="text" placeholder="Ad Soyad">
+<input id="telefon" type="tel" placeholder="Telefon">
+<textarea id="adres" placeholder="Adres"></textarea>
 
-            <input id="adSoyad" type="text" placeholder="Ad Soyad">
+<label>Alım Tarihi</label>
+<input id="alimTarihi" type="date">
 
-            <input id="telefon" type="tel" placeholder="Telefon">
+<label>Teslim Tarihi</label>
+<input id="teslimTarihi" type="date">
 
-            <textarea id="adres" placeholder="Adres"></textarea>
+<input id="haliM2" type="number" step="0.1" placeholder="Halı M²">
+<input id="tutar" type="number" step="0.01" placeholder="Tutar (TL)">
 
-            <label>Alım Tarihi</label>
-            <input id="alimTarihi" type="date">
+<select id="odemeDurumu">
+<option value="Ödenmedi">Ödenmedi</option>
+<option value="Kapora">Kapora</option>
+<option value="Ödendi">Ödendi</option>
+</select>
 
-            <label>Teslim Tarihi</label>
-            <input id="teslimTarihi" type="date">
+<textarea id="notlar" placeholder="Notlar"></textarea>
 
-            <input id="haliM2" type="number" step="0.1" placeholder="Halı M²">
+<button onclick="musteriKaydet()">💾 Müşteriyi Kaydet</button>
 
-            <input id="tutar" type="number" step="0.01" placeholder="Tutar (TL)">
-
-            <select id="odemeDurumu">
-                <option value="Ödenmedi">Ödenmedi</option>
-                <option value="Kapora">Kapora</option>
-                <option value="Ödendi">Ödendi</option>
-            </select>
-
-            <textarea id="notlar" placeholder="Notlar"></textarea>
-
-            <button onclick="musteriKaydet()">💾 Müşteriyi Kaydet</button>
-
-            <div id="saveMessage"></div>
-
-        </div>
+<div id="saveMessage"></div>
+</div>
 
 
-        <div class="card">
+<div class="card">
 
-            <h2>👥 Müşteriler</h2>
+<h2>👥 Müşteriler</h2>
 
-            <input
-                id="arama"
-                type="text"
-                placeholder="🔎 Müşteri adı veya telefon ara..."
-                oninput="musterileriGetir()"
-            >
+<input id="arama" type="text"
+placeholder="🔎 Müşteri adı veya telefon ara..."
+oninput="musterileriGetir()">
 
-            <div id="musteriListesi">
-                Yükleniyor...
-            </div>
+<div id="musteriListesi">Yükleniyor...</div>
 
-        </div>
+</div>
 
-    </div>
-
+</div>
 </div>
 
 
 <script>
 
-    const SUPABASE_URL = "https://ynbcnhsipsktgrnqidfa.supabase.co";
+const SUPABASE_URL =
+"https://ynbcnhsipsktgrnqidfa.supabase.co";
 
-    const SUPABASE_KEY = "sb_publishable_SpfDVJZCd9Q7tP2Ic25hUQ_vJlnVic7";
+const SUPABASE_KEY =
+"sb_publishable_SpfDVJZCd9Q7tP2Ic25hUQ_vJlnVic7";
 
-    const client = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const client =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
-    // GİRİŞ
-    async function login() {
+async function login(){
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+const email =
+document.getElementById("email").value.trim();
 
-        const message = document.getElementById("loginMessage");
+const password =
+document.getElementById("password").value;
 
-        if (!email || !password) {
-            message.innerHTML = "⚠️ E-posta ve şifre gir.";
-            return;
-        }
+const message =
+document.getElementById("loginMessage");
 
-        const { error } = await client.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
+if(!email || !password){
 
-        if (error) {
-            message.innerHTML = "❌ Giriş başarısız: " + error.message;
-            return;
-        }
+message.innerHTML="⚠️ E-posta ve şifre gir.";
 
-        message.innerHTML = "✅ Giriş başarılı.";
+return;
+}
 
-        uygulamayiAc();
+const {error} =
+await client.auth.signInWithPassword({
+email,
+password
+});
 
-    }
+if(error){
 
+message.innerHTML =
+"❌ Giriş başarısız: "+error.message;
 
-    // OTURUM KONTROL
-    async function oturumKontrol() {
+return;
+}
 
-        const { data } = await client.auth.getSession();
+uygulamayiAc();
+}
 
-        if (data.session) {
-            uygulamayiAc();
-        }
 
-    }
+async function oturumKontrol(){
 
+const {data} =
+await client.auth.getSession();
 
-    // UYGULAMAYI AÇ
-    async function uygulamayiAc() {
+if(data.session){
 
-        document.getElementById("loginBox").classList.add("hidden");
-        document.getElementById("app").classList.remove("hidden");
+uygulamayiAc();
 
-        await musterileriGetir();
+}
 
-    }
+}
 
 
-    // ÇIKIŞ
-    async function logout() {
+async function uygulamayiAc(){
 
-        await client.auth.signOut();
+document.getElementById("loginBox")
+.classList.add("hidden");
 
-        document.getElementById("app").classList.add("hidden");
-        document.getElementById("loginBox").classList.remove("hidden");
+document.getElementById("app")
+.classList.remove("hidden");
 
-    }
+await musterileriGetir();
 
+}
 
-    // MÜŞTERİ KAYDET
-    async function musteriKaydet() {
 
-        const { data: { user } } = await client.auth.getUser();
+async function logout(){
 
-        if (!user) {
-            alert("Önce giriş yapmalısın.");
-            return;
-        }
+await client.auth.signOut();
 
-        const kayit = {
+location.reload();
 
-            ad_soyad:
-                document.getElementById("adSoyad").value.trim(),
+}
 
-            telefon:
-                document.getElementById("telefon").value.trim(),
 
-            adres:
-                document.getElementById("adres").value.trim(),
+async function musteriKaydet(){
 
-            alim_tarihi:
-                document.getElementById("alimTarihi").value || null,
+const {data:{user}} =
+await client.auth.getUser();
 
-            teslim_tarihi:
-                document.getElementById("teslimTarihi").value || null,
+if(!user){
 
-            hali_m2:
-                document.getElementById("haliM2").value
-                    ? Number(document.getElementById("haliM2").value)
-                    : null,
+alert("Önce giriş yapmalısın.");
 
-            tutar:
-                document.getElementById("tutar").value
-                    ? Number(document.getElementById("tutar").value)
-                    : null,
+return;
+}
 
-            odeme_durumu:
-                document.getElementById("odemeDurumu").value,
 
-            notlar:
-                document.getElementById("notlar").value.trim(),
+const kayit={
 
-            user_id: user.id
+ad_soyad:
+document.getElementById("adSoyad").value.trim(),
 
-        };
+telefon:
+document.getElementById("telefon").value.trim(),
 
+adres:
+document.getElementById("adres").value.trim(),
 
-        if (!kayit.ad_soyad || !kayit.telefon) {
+alim_tarihi:
+document.getElementById("alimTarihi").value || null,
 
-            document.getElementById("saveMessage").innerHTML =
-                "⚠️ Ad soyad ve telefon gerekli.";
+teslim_tarihi:
+document.getElementById("teslimTarihi").value || null,
 
-            return;
-        }
+hali_m2:
+document.getElementById("haliM2").value
+? Number(document.getElementById("haliM2").value)
+: null,
 
+tutar:
+document.getElementById("tutar").value
+? Number(document.getElementById("tutar").value)
+: null,
 
-        const { error } = await client
-            .from("Müşteriler")
-            .insert([kayit]);
+odeme_durumu:
+document.getElementById("odemeDurumu").value,
 
+notlar:
+document.getElementById("notlar").value.trim(),
 
-        if (error) {
+user_id:user.id
 
-            document.getElementById("saveMessage").innerHTML =
-                "❌ Kayıt hatası: " + error.message;
+};
 
-            return;
 
-        }
+if(!kayit.ad_soyad || !kayit.telefon){
 
+document.getElementById("saveMessage").innerHTML =
+"⚠️ Ad soyad ve telefon gerekli.";
 
-        document.getElementById("saveMessage").innerHTML =
-            "✅ Müşteri başarıyla kaydedildi!";
+return;
+}
 
 
-        // Formu temizle
+const {error} =
+await client
+.from("Müşteriler")
+.insert([kayit]);
 
-        document.getElementById("adSoyad").value = "";
-        document.getElementById("telefon").value = "";
-        document.getElementById("adres").value = "";
-        document.getElementById("alimTarihi").value = "";
-        document.getElementById("teslimTarihi").value = "";
-        document.getElementById("haliM2").value = "";
-        document.getElementById("tutar").value = "";
-        document.getElementById("notlar").value = "";
 
-        await musterileriGetir();
+if(error){
 
-    }
+document.getElementById("saveMessage").innerHTML =
+"❌ Kayıt hatası: "+error.message;
 
+return;
 
-    // MÜŞTERİLERİ GETİR
-    async function musterileriGetir() {
+}
 
-        const { data: { user } } = await client.auth.getUser();
 
-        if (!user) return;
+document.getElementById("saveMessage").innerHTML =
+"✅ Müşteri başarıyla kaydedildi!";
 
 
-        const arama =
-            document.getElementById("arama")?.value
-            .trim()
-            .toLowerCase() || "";
+document.getElementById("adSoyad").value="";
+document.getElementById("telefon").value="";
+document.getElementById("adres").value="";
+document.getElementById("alimTarihi").value="";
+document.getElementById("teslimTarihi").value="";
+document.getElementById("haliM2").value="";
+document.getElementById("tutar").value="";
+document.getElementById("notlar").value="";
 
+await musterileriGetir();
 
-        let query = client
-            .from("Müşteriler")
-            .select("*")
-            .eq("user_id", user.id)
-            .order("created_at", { ascending: false });
+}
 
 
-        const { data, error } = await query;
+async function musterileriGetir(){
 
+const {data:{user}} =
+await client.auth.getUser();
 
-        if (error) {
+if(!user)return;
 
-            document.getElementById("musteriListesi").innerHTML =
-                "❌ Müşteriler alınamadı: " + error.message;
 
-            return;
+const arama =
+document.getElementById("arama")?.value
+.trim()
+.toLowerCase() || "";
 
-        }
 
+const {data,error} =
+await client
+.from("Müşteriler")
+.select("*")
+.eq("user_id",user.id)
+.order("created_at",{ascending:false});
 
-        let liste = data || [];
 
+if(error){
 
-        if (arama) {
+document.getElementById("musteriListesi").innerHTML =
+"❌ Müşteriler alınamadı: "+error.message;
 
-            liste = liste.filter(m =>
+return;
+}
 
-                (m.ad_soyad || "").toLowerCase().includes(arama) ||
 
-                (m.telefon || "").toLowerCase().includes(arama)
+let liste=data||[];
 
-            );
 
-        }
+if(arama){
 
+liste=liste.filter(m=>
+(m.ad_soyad||"").toLowerCase().includes(arama) ||
+(m.telefon||"").toLowerCase().includes(arama)
+);
 
-        if (liste.length === 0) {
+}
 
-            document.getElementById("musteriListesi").innerHTML =
-                "Henüz müşteri kaydı yok.";
 
-            return;
+if(liste.length===0){
 
-        }
+document.getElementById("musteriListesi").innerHTML =
+"Henüz müşteri kaydı yok.";
 
+return;
+}
 
-        document.getElementById("musteriListesi").innerHTML =
-            liste.map(m => `
 
-                <div class="customer">
+document.getElementById("musteriListesi").innerHTML =
+liste.map(m=>`
 
-                    <strong>${guvenli(m.ad_soyad)}</strong>
+<div class="customer">
 
-                    <div>📞 ${guvenli(m.telefon)}</div>
+<strong>${guvenli(m.ad_soyad)}</strong>
 
-                    <div>📍 ${guvenli(m.adres || "-")}</div>
+<div>📞 ${guvenli(m.telefon)}</div>
 
-                    <div>📅 Alım: ${guvenli(m.alim_tarihi || "-")}</div>
+<div>📍 ${guvenli(m.adres||"-")}</div>
 
-                    <div>🚚 Teslim: ${guvenli(m.teslim_tarihi || "-")}</div>
+<div>📅 Alım: ${guvenli(m.alim_tarihi||"-")}</div>
 
-                    <div>🧼 ${m.hali_m2 ?? "-"} m²</div>
+<div>🚚 Teslim: ${guvenli(m.teslim_tarihi||"-")}</div>
 
-                    <div>💰 ${m.tutar ?? "-"} TL</div>
+<div>🧼 ${m.hali_m2??"-"} m²</div>
 
-                    <div class="status">
-                        ${guvenli(m.odeme_durumu || "-")}
-                    </div>
+<div>💰 ${m.tutar??"-"} TL</div>
 
-                    <div>📝 ${guvenli(m.notlar || "-")}</div>
+<div class="status">
+${guvenli(m.odeme_durumu||"-")}
+</div>
 
-                </div>
+<div>📝 ${guvenli(m.notlar||"-")}</div>
 
-            `).join("");
+</div>
 
-    }
+`).join("");
 
+}
 
-    // HTML GÜVENLİĞİ
-    function guvenli(text) {
 
-        return String(text)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+function guvenli(text){
 
-    }
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
+}
 
-    // SAYFA AÇILINCA OTURUMU KONTROL ET
-    oturumKontrol();
+
+oturumKontrol();
 
 </script>
 
