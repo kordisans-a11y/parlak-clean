@@ -42,14 +42,14 @@ button{background:#1677ff;color:white;border:0;font-weight:bold;cursor:pointer}
 
     <div id="resetMessage"></div>
 </div>
+
 <div id="loginBox" class="card">
-<h2>📱 Parlak Clean'e Giriş</h2>
+<h2>🔐 Giriş Yap</h2>
 
-<input id="phone" type="tel" placeholder="Telefon numarası">
+<input id="email" type="email" placeholder="E-posta">
+<input id="password" type="password" placeholder="Şifre">
 
-<input id="testCode" type="number" placeholder="6 haneli test kodu">
-
-<button onclick="telefonlaGiris()">Giriş Yap</button>
+<button onclick="login()">Giriş Yap</button>
 
 <div id="loginMessage"></div>
 </div>
@@ -119,29 +119,37 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+async function login(){
 
-async function telefonlaGiris(){
+    const email =
+        document.getElementById("email").value.trim();
 
-    const phone =
-        document.getElementById("phone").value.trim();
-
-    const code =
-        document.getElementById("testCode").value.trim();
+    const password =
+        document.getElementById("password").value;
 
     const message =
         document.getElementById("loginMessage");
 
-    if(!phone){
+    if(!email || !password){
         message.innerHTML =
-            "⚠️ Telefon numaranı gir.";
+            "⚠️ E-posta ve şifre gir.";
         return;
     }
 
-    if(code !== "123456"){
+    const {error} =
+        await client.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+    if(error){
         message.innerHTML =
-            "❌ Test kodu yanlış.";
+            "❌ Giriş başarısız: " + error.message;
         return;
     }
+
+    uygulamayiAc();
+}
 
     message.innerHTML =
         "⏳ Giriş yapılıyor...";
