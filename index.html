@@ -1,9 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Parlak Clean</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,29 +13,14 @@
     box-sizing:border-box;
 }
 
-:root{
-    --blue:#1677ff;
-    --dark:#172033;
-    --muted:#7b8494;
-    --bg:#f5f7fb;
-    --card:#ffffff;
-    --border:#e7ebf2;
-    --green:#19a463;
-    --orange:#f59e0b;
-    --red:#e5484d;
-}
-
 body{
     margin:0;
-    background:var(--bg);
-    color:var(--dark);
+    background:#f5f7fb;
+    color:#172033;
     font-family:Arial,Helvetica,sans-serif;
 }
 
-button,
-input,
-textarea,
-select{
+button,input,textarea{
     font:inherit;
 }
 
@@ -47,33 +32,19 @@ button{
     display:none!important;
 }
 
-.app{
-    min-height:100vh;
-    padding-bottom:90px;
-}
-
-.container{
-    width:100%;
-    max-width:1100px;
-    margin:auto;
-    padding:16px;
-}
-
-/* HEADER */
+/* ÜST */
 
 .top-header{
     background:linear-gradient(135deg,#1677ff,#0757c9);
     color:white;
     padding:22px 18px 28px;
     border-radius:0 0 28px 28px;
-    box-shadow:0 8px 25px rgba(22,119,255,.22);
 }
 
 .top-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:15px;
 }
 
 .brand{
@@ -95,195 +66,173 @@ button{
     border-radius:10px;
 }
 
-/* DASHBOARD */
+/* ANA */
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+    padding-bottom:95px;
+}
 
 .welcome{
-    margin-top:20px;
     font-size:25px;
     font-weight:800;
+    margin-top:18px;
 }
 
 .date-text{
-    color:var(--muted);
+    color:#7b8494;
     margin-top:5px;
 }
 
 .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:12px;
+    gap:10px;
     margin-top:18px;
 }
 
 .stat{
     background:white;
-    border:1px solid var(--border);
+    border:1px solid #e7ebf2;
     border-radius:17px;
-    padding:15px;
-    box-shadow:0 3px 12px rgba(0,0,0,.04);
+    padding:14px;
 }
 
 .stat-icon{
-    font-size:23px;
+    font-size:22px;
 }
 
 .stat-label{
-    color:var(--muted);
+    color:#7b8494;
     font-size:12px;
-    margin-top:7px;
+    margin-top:6px;
 }
 
 .stat-value{
-    font-size:21px;
+    font-size:19px;
     font-weight:800;
     margin-top:4px;
 }
 
-/* QUICK */
-
 .section-title{
-    font-size:18px;
+    font-size:19px;
     font-weight:800;
     margin:24px 0 12px;
 }
 
+/* HIZLI BUTONLAR */
+
 .quick-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:12px;
+    gap:10px;
 }
 
 .quick{
-    border:0;
+    border:1px solid #e7ebf2;
     background:white;
-    border:1px solid var(--border);
     border-radius:17px;
-    padding:18px 10px;
-    box-shadow:0 3px 12px rgba(0,0,0,.04);
+    padding:16px 8px;
 }
 
 .quick-icon{
-    font-size:28px;
+    font-size:27px;
 }
 
 .quick-text{
-    margin-top:8px;
+    margin-top:7px;
     font-weight:bold;
     font-size:13px;
 }
 
-/* CARD */
+/* KART */
 
 .card{
     background:white;
-    border:1px solid var(--border);
+    border:1px solid #e7ebf2;
     border-radius:18px;
-    padding:18px;
-    margin-top:16px;
-    box-shadow:0 3px 12px rgba(0,0,0,.04);
+    padding:17px;
+    margin-top:15px;
 }
 
 .card h2{
     margin:0 0 15px;
 }
 
-/* TODAY */
+/* FORM */
 
-.today-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:13px 0;
-    border-bottom:1px solid var(--border);
+input,textarea{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    margin-bottom:7px;
+    border:1px solid #dce1e9;
+    border-radius:11px;
+    outline:none;
+    background:white;
 }
 
-.today-item:last-child{
-    border-bottom:0;
+textarea{
+    min-height:90px;
+    resize:vertical;
 }
 
-.time{
-    font-weight:800;
-    width:55px;
-}
-
-.today-main{
-    flex:1;
-}
-
-.today-name{
+label{
+    display:block;
+    color:#606a7a;
+    font-size:12px;
     font-weight:bold;
+    margin-top:8px;
 }
 
-.today-detail{
-    color:var(--muted);
-    font-size:13px;
-    margin-top:3px;
-}
-
-.status{
-    padding:6px 9px;
-    border-radius:20px;
-    font-size:11px;
+.primary{
+    width:100%;
+    border:0;
+    background:#1677ff;
+    color:white;
+    padding:14px;
+    border-radius:11px;
     font-weight:bold;
-    background:#eef2f7;
+    margin-top:8px;
 }
 
-.status.alinacak{
-    background:#fff4db;
-    color:#a56800;
+.secondary{
+    width:100%;
+    border:0;
+    background:#edf0f4;
+    color:#333;
+    padding:13px;
+    border-radius:11px;
+    margin-top:8px;
 }
 
-.status.yikamaday{
-    background:#e9f1ff;
-    color:#1764d1;
-}
-
-.status.hazir{
-    background:#e9f9f0;
-    color:#08763e;
-}
-
-.status.teslim{
-    background:#eee9ff;
-    color:#6941c6;
-}
-
-/* SEARCH */
+/* ARAMA */
 
 .search{
     position:relative;
 }
 
 .search input{
-    width:100%;
-    padding:14px 15px 14px 43px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    outline:none;
-    background:#fafbfc;
+    padding-left:42px;
 }
 
 .search-icon{
     position:absolute;
-    left:15px;
-    top:13px;
+    left:14px;
+    top:19px;
 }
 
-/* CUSTOMER */
+/* MÜŞTERİ */
 
 .customer{
     padding:16px 0;
-    border-bottom:1px solid var(--border);
+    border-bottom:1px solid #e7ebf2;
 }
 
 .customer:last-child{
     border-bottom:0;
-}
-
-.customer-top{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
 }
 
 .customer-name{
@@ -292,30 +241,30 @@ button{
 }
 
 .customer-phone{
-    color:var(--blue);
+    color:#1677ff;
     margin-top:5px;
 }
 
 .customer-info{
-    color:#5f6878;
+    color:#606a7a;
+    font-size:14px;
     line-height:1.7;
     margin-top:8px;
-    font-size:14px;
 }
 
 .actions{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:8px;
-    margin-top:12px;
+    gap:7px;
+    margin-top:11px;
 }
 
 .action{
     border:0;
-    background:#eef4ff;
-    color:var(--blue);
     border-radius:9px;
-    padding:10px 7px;
+    padding:10px 5px;
+    background:#edf4ff;
+    color:#1677ff;
     font-weight:bold;
     font-size:12px;
 }
@@ -330,62 +279,16 @@ button{
     color:#c83238;
 }
 
-/* FORM */
-
-.form-group{
-    margin-bottom:5px;
-}
-
-label{
-    display:block;
-    font-size:12px;
-    color:#616b7b;
-    font-weight:bold;
-    margin-top:10px;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    border:1px solid #dce1e9;
-    border-radius:11px;
-    padding:13px;
-    margin-top:6px;
-    outline:none;
-    background:white;
-}
-
-textarea{
-    min-height:90px;
-    resize:vertical;
-}
-
-.primary{
-    width:100%;
-    background:var(--blue);
-    color:white;
-    border:0;
-    padding:14px;
-    border-radius:11px;
-    font-weight:bold;
-    margin-top:12px;
-}
-
-.secondary{
-    width:100%;
-    background:#eef1f5;
-    color:#333;
-    border:0;
-    padding:13px;
-    border-radius:11px;
-    margin-top:8px;
+.empty{
+    text-align:center;
+    color:#7b8494;
+    padding:25px 5px;
 }
 
 .message{
-    padding:11px;
-    border-radius:10px;
     margin-top:10px;
+    padding:10px;
+    border-radius:10px;
     font-size:14px;
 }
 
@@ -399,25 +302,34 @@ textarea{
     color:#b42318;
 }
 
-/* BOTTOM NAV */
+/* SAYFALAR */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* ALT MENÜ */
 
 .bottom-nav{
     position:fixed;
-    bottom:0;
     left:0;
     right:0;
+    bottom:0;
     height:72px;
     background:white;
-    border-top:1px solid var(--border);
-    display:flex;
-    justify-content:center;
-    z-index:100;
+    border-top:1px solid #e7ebf2;
     box-shadow:0 -5px 20px rgba(0,0,0,.07);
+    z-index:100;
 }
 
 .nav-inner{
-    width:100%;
     max-width:700px;
+    height:100%;
+    margin:auto;
     display:grid;
     grid-template-columns:repeat(5,1fr);
 }
@@ -439,35 +351,13 @@ textarea{
 }
 
 .nav-btn.active{
-    color:var(--blue);
+    color:#1677ff;
     font-weight:bold;
 }
 
-/* PAGE */
+/* MOBİL */
 
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-}
-
-/* EMPTY */
-
-.empty{
-    text-align:center;
-    color:var(--muted);
-    padding:30px 10px;
-}
-
-/* MOBILE */
-
-@media(max-width:750px){
-
-    .container{
-        padding:12px;
-    }
+@media(max-width:700px){
 
     .stats{
         grid-template-columns:repeat(2,1fr);
@@ -477,10 +367,6 @@ textarea{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .top-header{
-        margin:0 -12px;
-        border-radius:0 0 24px 24px;
-    }
 }
 
 @media(max-width:430px){
@@ -489,30 +375,17 @@ textarea{
         font-size:20px;
     }
 
-    .stats{
-        gap:8px;
+    .container{
+        padding:12px;
     }
 
-    .stat{
-        padding:13px;
-    }
-
-    .stat-value{
-        font-size:18px;
-    }
-
-    .actions{
-        grid-template-columns:1fr 1fr 1fr;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<div id="app" class="app">
-
-<!-- HEADER -->
+<div id="app">
 
 <header class="top-header">
 
@@ -536,8 +409,7 @@ textarea{
 
 <div class="container">
 
-
-<!-- ================= ANA SAYFA ================= -->
+<!-- ANA SAYFA -->
 
 <section id="pageHome" class="page active">
 
@@ -545,16 +417,14 @@ textarea{
         Hoş geldin 👋
     </div>
 
-    <div class="date-text" id="bugunTarihi">
-        Bugünün işleri
-    </div>
+    <div class="date-text" id="bugunTarihi"></div>
 
 
     <div class="stats">
 
         <div class="stat">
             <div class="stat-icon">👥</div>
-            <div class="stat-label">Müşteriler</div>
+            <div class="stat-label">Toplam Müşteri</div>
             <div class="stat-value" id="toplamMusteri">0</div>
         </div>
 
@@ -566,14 +436,14 @@ textarea{
 
         <div class="stat">
             <div class="stat-icon">💰</div>
-            <div class="stat-label">Toplam Ciro</div>
+            <div class="stat-label">Toplam Tutar</div>
             <div class="stat-value" id="toplamTutar">0 TL</div>
         </div>
 
         <div class="stat">
-            <div class="stat-icon">⏳</div>
-            <div class="stat-label">Bekleyen</div>
-            <div class="stat-value" id="bekleyenOdeme">0 TL</div>
+            <div class="stat-icon">📦</div>
+            <div class="stat-label">Toplam İş</div>
+            <div class="stat-value" id="toplamIs">0</div>
         </div>
 
     </div>
@@ -611,12 +481,10 @@ textarea{
 
     <div class="card">
 
-        <h2>📅 Bugünkü İşler</h2>
+        <h2>📅 Yaklaşan Teslimatlar</h2>
 
-        <div id="bugunkuIsler">
-            <div class="empty">
-                Bugün için kayıt bulunmuyor.
-            </div>
+        <div id="yaklasanIsler">
+            Yükleniyor...
         </div>
 
     </div>
@@ -624,7 +492,7 @@ textarea{
 </section>
 
 
-<!-- ================= İŞLER ================= -->
+<!-- İŞLER -->
 
 <section id="pageJobs" class="page">
 
@@ -636,24 +504,26 @@ textarea{
 
         <div class="search">
 
-            <div class="search-icon">🔎</div>
+            <span class="search-icon">🔎</span>
 
             <input
                 id="isArama"
-                placeholder="İş veya müşteri ara..."
+                placeholder="Müşteri veya telefon ara..."
                 oninput="musterileriGetir()"
             >
 
         </div>
 
-        <div id="islerListesi"></div>
+        <div id="islerListesi">
+            Yükleniyor...
+        </div>
 
     </div>
 
 </section>
 
 
-<!-- ================= MÜŞTERİLER ================= -->
+<!-- MÜŞTERİLER -->
 
 <section id="pageCustomers" class="page">
 
@@ -661,7 +531,11 @@ textarea{
         👥 Müşteriler
     </div>
 
-    <button class="primary" onclick="musteriFormAc()">
+
+    <button
+        class="primary"
+        onclick="musteriFormAc()"
+    >
         ➕ Yeni Müşteri Ekle
     </button>
 
@@ -686,12 +560,14 @@ textarea{
             placeholder="Adres"
         ></textarea>
 
+
         <label>Alım Tarihi</label>
 
         <input
             id="alimTarihi"
             type="date"
         >
+
 
         <label>Teslim Tarihi</label>
 
@@ -700,12 +576,14 @@ textarea{
             type="date"
         >
 
+
         <input
             id="haliM2"
             type="number"
             step="0.1"
             placeholder="Halı M²"
         >
+
 
         <input
             id="tutar"
@@ -714,34 +592,20 @@ textarea{
             placeholder="Tutar (TL)"
         >
 
-        <label>İş Durumu</label>
-
-        <select id="isDurumu">
-            <option>Alınacak</option>
-            <option>Yıkamada</option>
-            <option>Hazır</option>
-            <option>Teslim Edildi</option>
-        </select>
-
-        <label>Ödeme Durumu</label>
-
-        <select id="odemeDurumu">
-            <option>Ödenmedi</option>
-            <option>Kapora</option>
-            <option>Ödendi</option>
-        </select>
 
         <textarea
             id="notlar"
             placeholder="Notlar"
         ></textarea>
 
+
         <button
             class="primary"
             onclick="musteriKaydet()"
         >
-            💾 Kaydet
+            💾 Müşteriyi Kaydet
         </button>
+
 
         <button
             class="secondary"
@@ -749,6 +613,7 @@ textarea{
         >
             Vazgeç
         </button>
+
 
         <div id="saveMessage"></div>
 
@@ -759,15 +624,16 @@ textarea{
 
         <div class="search">
 
-            <div class="search-icon">🔎</div>
+            <span class="search-icon">🔎</span>
 
             <input
                 id="arama"
-                placeholder="Ad, soyad veya telefon..."
+                placeholder="Ad, soyad veya telefon ara..."
                 oninput="musterileriGetir()"
             >
 
         </div>
+
 
         <div id="musteriListesi">
             Yükleniyor...
@@ -778,7 +644,7 @@ textarea{
 </section>
 
 
-<!-- ================= KASA ================= -->
+<!-- KASA -->
 
 <section id="pageCash" class="page">
 
@@ -786,30 +652,42 @@ textarea{
         💰 Kasa
     </div>
 
+
     <div class="stats">
 
         <div class="stat">
+
             <div class="stat-icon">💵</div>
-            <div class="stat-label">Toplam</div>
-            <div class="stat-value" id="kasaToplam">0 TL</div>
+
+            <div class="stat-label">
+                Toplam Tutar
+            </div>
+
+            <div
+                class="stat-value"
+                id="kasaToplam"
+            >
+                0 TL
+            </div>
+
         </div>
 
-        <div class="stat">
-            <div class="stat-icon">✅</div>
-            <div class="stat-label">Ödenen</div>
-            <div class="stat-value" id="kasaOdenen">0 TL</div>
-        </div>
 
         <div class="stat">
-            <div class="stat-icon">⏳</div>
-            <div class="stat-label">Bekleyen</div>
-            <div class="stat-value" id="kasaBekleyen">0 TL</div>
-        </div>
 
-        <div class="stat">
             <div class="stat-icon">🧼</div>
-            <div class="stat-label">Toplam M²</div>
-            <div class="stat-value" id="kasaM2">0</div>
+
+            <div class="stat-label">
+                Toplam M²
+            </div>
+
+            <div
+                class="stat-value"
+                id="kasaM2"
+            >
+                0
+            </div>
+
         </div>
 
     </div>
@@ -817,10 +695,10 @@ textarea{
 
     <div class="card">
 
-        <h2>💳 Ödeme Özeti</h2>
+        <h2>Son İşler</h2>
 
         <div id="kasaListe">
-            Veriler yükleniyor...
+            Yükleniyor...
         </div>
 
     </div>
@@ -828,13 +706,14 @@ textarea{
 </section>
 
 
-<!-- ================= DAHA FAZLA ================= -->
+<!-- DAHA FAZLA -->
 
 <section id="pageMore" class="page">
 
     <div class="section-title">
         ⚙️ Daha Fazla
     </div>
+
 
     <div class="card">
 
@@ -847,24 +726,25 @@ textarea{
 
     </div>
 
+
     <div class="card">
 
         <h2>📅 Takvim</h2>
 
         <p>
             Alım ve teslim tarihlerini
-            takvim üzerinden takip edeceğiz.
+            burada takip edeceğiz.
         </p>
 
     </div>
+
 
     <div class="card">
 
         <h2>⚙️ Ayarlar</h2>
 
         <p>
-            İşletme ayarları ve uygulama
-            seçenekleri burada olacak.
+            İşletme ayarları burada olacak.
         </p>
 
     </div>
@@ -878,61 +758,65 @@ textarea{
 
 <nav class="bottom-nav">
 
-    <div class="nav-inner">
+<div class="nav-inner">
 
-        <button
-            id="navHome"
-            class="nav-btn active"
-            onclick="sayfaAc('pageHome','navHome')"
-        >
-            <span class="icon">🏠</span>
-            Ana Sayfa
-        </button>
+    <button
+        id="navHome"
+        class="nav-btn active"
+        onclick="sayfaAc('pageHome','navHome')"
+    >
+        <span class="icon">🏠</span>
+        Ana Sayfa
+    </button>
 
-        <button
-            id="navJobs"
-            class="nav-btn"
-            onclick="sayfaAc('pageJobs','navJobs')"
-        >
-            <span class="icon">📦</span>
-            İşler
-        </button>
 
-        <button
-            id="navCustomers"
-            class="nav-btn"
-            onclick="sayfaAc('pageCustomers','navCustomers')"
-        >
-            <span class="icon">👥</span>
-            Müşteriler
-        </button>
+    <button
+        id="navJobs"
+        class="nav-btn"
+        onclick="sayfaAc('pageJobs','navJobs')"
+    >
+        <span class="icon">📦</span>
+        İşler
+    </button>
 
-        <button
-            id="navCash"
-            class="nav-btn"
-            onclick="sayfaAc('pageCash','navCash')"
-        >
-            <span class="icon">💰</span>
-            Kasa
-        </button>
 
-        <button
-            id="navMore"
-            class="nav-btn"
-            onclick="sayfaAc('pageMore','navMore')"
-        >
-            <span class="icon">☰</span>
-            Daha Fazla
-        </button>
+    <button
+        id="navCustomers"
+        class="nav-btn"
+        onclick="sayfaAc('pageCustomers','navCustomers')"
+    >
+        <span class="icon">👥</span>
+        Müşteriler
+    </button>
 
-    </div>
+
+    <button
+        id="navCash"
+        class="nav-btn"
+        onclick="sayfaAc('pageCash','navCash')"
+    >
+        <span class="icon">💰</span>
+        Kasa
+    </button>
+
+
+    <button
+        id="navMore"
+        class="nav-btn"
+        onclick="sayfaAc('pageMore','navMore')"
+    >
+        <span class="icon">☰</span>
+        Daha Fazla
+    </button>
+
+</div>
 
 </nav>
 
 
 <script>
 
-/* ================= SUPABASE ================= */
+/* SUPABASE */
 
 const SUPABASE_URL =
 "https://ynbcnhsipsktgrnqidfa.supabase.co";
@@ -947,40 +831,44 @@ window.supabase.createClient(
 );
 
 
-/* ================= SAYFA ================= */
+/* SAYFA */
 
 function sayfaAc(pageId,navId){
 
     document
-        .querySelectorAll(".page")
-        .forEach(p =>
-            p.classList.remove("active")
-        );
+    .querySelectorAll(".page")
+    .forEach(function(page){
 
-    document
-        .getElementById(pageId)
-        .classList.add("active");
+        page.classList.remove("active");
 
-
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(b =>
-            b.classList.remove("active")
-        );
-
-    document
-        .getElementById(navId)
-        .classList.add("active");
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
     });
+
+
+    document
+    .getElementById(pageId)
+    .classList.add("active");
+
+
+    document
+    .querySelectorAll(".nav-btn")
+    .forEach(function(btn){
+
+        btn.classList.remove("active");
+
+    });
+
+
+    document
+    .getElementById(navId)
+    .classList.add("active");
+
+
+    window.scrollTo(0,0);
 
 }
 
 
-/* ================= FORM ================= */
+/* FORM */
 
 function musteriFormAc(){
 
@@ -990,13 +878,8 @@ function musteriFormAc(){
     );
 
     document
-        .getElementById("formBox")
-        .classList.remove("hidden");
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    .getElementById("formBox")
+    .classList.remove("hidden");
 
 }
 
@@ -1004,125 +887,124 @@ function musteriFormAc(){
 function formKapat(){
 
     document
-        .getElementById("formBox")
-        .classList.add("hidden");
+    .getElementById("formBox")
+    .classList.add("hidden");
 
 }
 
 
-/* ================= GÜVENLİ METİN ================= */
+/* GÜVENLİ METİN */
 
 function guvenli(text){
 
     return String(text ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* ================= MÜŞTERİ KAYDET ================= */
+/* MÜŞTERİ KAYDET */
 
 async function musteriKaydet(){
 
-    const {data:{user}} =
-        await client.auth.getUser();
+    const ad =
+        document
+        .getElementById("adSoyad")
+        .value
+        .trim();
 
-    if(!user){
+    const telefon =
+        document
+        .getElementById("telefon")
+        .value
+        .trim();
 
-        alert("Oturum bulunamadı.");
+    const adres =
+        document
+        .getElementById("adres")
+        .value
+        .trim();
 
-        return;
-    }
+    const alim =
+        document
+        .getElementById("alimTarihi")
+        .value || null;
 
+    const teslim =
+        document
+        .getElementById("teslimTarihi")
+        .value || null;
 
-    const kayit = {
-
-        ad_soyad:
-            document
-            .getElementById("adSoyad")
-            .value
-            .trim(),
-
-        telefon:
-            document
-            .getElementById("telefon")
-            .value
-            .trim(),
-
-        adres:
-            document
-            .getElementById("adres")
-            .value
-            .trim(),
-
-        alim_tarihi:
-            document
-            .getElementById("alimTarihi")
-            .value || null,
-
-        teslim_tarihi:
-            document
-            .getElementById("teslimTarihi")
-            .value || null,
-
-        hali_m2:
+    const m2 =
+        document
+        .getElementById("haliM2")
+        .value
+        ?
+        Number(
             document
             .getElementById("haliM2")
             .value
-            ?
-            Number(
-                document
-                .getElementById("haliM2")
-                .value
-            )
-            :
-            null,
+        )
+        :
+        null;
 
-        tutar:
+    const tutar =
+        document
+        .getElementById("tutar")
+        .value
+        ?
+        Number(
             document
             .getElementById("tutar")
             .value
-            ?
-            Number(
-                document
-                .getElementById("tutar")
-                .value
-            )
-            :
-            null,
+        )
+        :
+        null;
 
-        odeme_durumu:
-            document
-            .getElementById("odemeDurumu")
-            .value,
-
-        notlar:
-            document
-            .getElementById("notlar")
-            .value
-            .trim(),
-
-        user_id:user.id
-
-    };
+    const notlar =
+        document
+        .getElementById("notlar")
+        .value
+        .trim();
 
 
-    if(!kayit.ad_soyad ||
-       !kayit.telefon){
+    if(!ad){
 
         document
         .getElementById("saveMessage")
         .innerHTML =
         '<div class="message error">' +
-        '⚠️ Ad soyad ve telefon gerekli.' +
+        '⚠️ Ad Soyad gir.' +
         '</div>';
 
         return;
+
     }
+
+
+    const kayit = {
+
+        ad_soyad:ad,
+
+        telefon:telefon,
+
+        adres:adres,
+
+        alim_tarihi:alim,
+
+        teslim_tarihi:teslim,
+
+        hali_m2:m2,
+
+        tutar:tutar,
+
+        notlar:notlar
+
+    };
 
 
     const {error} =
@@ -1137,11 +1019,12 @@ async function musteriKaydet(){
         .getElementById("saveMessage")
         .innerHTML =
         '<div class="message error">' +
-        '❌ Kayıt hatası: ' +
+        '❌ Kayıt yapılamadı: ' +
         guvenli(error.message) +
         '</div>';
 
         return;
+
     }
 
 
@@ -1149,7 +1032,7 @@ async function musteriKaydet(){
     .getElementById("saveMessage")
     .innerHTML =
     '<div class="message success">' +
-    '✅ Müşteri kaydedildi!' +
+    '✅ Müşteri başarıyla kaydedildi!' +
     '</div>';
 
 
@@ -1160,7 +1043,7 @@ async function musteriKaydet(){
 }
 
 
-/* ================= FORM TEMİZLE ================= */
+/* FORM TEMİZLE */
 
 function formTemizle(){
 
@@ -1176,38 +1059,14 @@ function formTemizle(){
 }
 
 
-/* ================= MÜŞTERİLER ================= */
+/* MÜŞTERİLERİ GETİR */
 
 async function musterileriGetir(){
-
-    const {data:{user}} =
-        await client.auth.getUser();
-
-    if(!user){
-
-        return;
-    }
-
-
-    const arama =
-        (
-            document
-            .getElementById("arama")
-            ?.value ||
-            document
-            .getElementById("isArama")
-            ?.value ||
-            ""
-        )
-        .trim()
-        .toLowerCase();
-
 
     const {data,error} =
         await client
         .from("Müşteriler")
         .select("*")
-        .eq("user_id",user.id)
         .order(
             "created_at",
             {ascending:false}
@@ -1220,15 +1079,33 @@ async function musterileriGetir(){
         .getElementById("musteriListesi")
         .innerHTML =
         '<div class="message error">' +
+        '❌ Veriler alınamadı: ' +
         guvenli(error.message) +
         '</div>';
 
         return;
+
     }
 
 
-    const liste =
-        (data || []).filter(m => {
+    const musteriler =
+        data || [];
+
+
+    /* ARAMA */
+
+    const arama =
+        (
+            document
+            .getElementById("arama")
+            ?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const filtreli =
+        musteriler.filter(function(m){
 
             if(!arama){
 
@@ -1236,12 +1113,14 @@ async function musterileriGetir(){
 
             }
 
+
             return (
-                (m.ad_soyad || "")
+                String(m.ad_soyad || "")
                 .toLowerCase()
                 .includes(arama)
                 ||
-                (m.telefon || "")
+
+                String(m.telefon || "")
                 .toLowerCase()
                 .includes(arama)
             );
@@ -1249,99 +1128,73 @@ async function musterileriGetir(){
         });
 
 
-    /* İSTATİSTİK */
+    /* İSTATİSTİKLER */
 
     const toplamM2 =
-        (data || [])
-        .reduce(
-            (a,m)=>
-                a + Number(m.hali_m2 || 0),
+        musteriler.reduce(
+            function(toplam,m){
+
+                return toplam +
+                Number(m.hali_m2 || 0);
+
+            },
             0
         );
 
 
     const toplamTutar =
-        (data || [])
-        .reduce(
-            (a,m)=>
-                a + Number(m.tutar || 0),
+        musteriler.reduce(
+            function(toplam,m){
+
+                return toplam +
+                Number(m.tutar || 0);
+
+            },
             0
         );
 
 
-    const bekleyen =
-        (data || [])
-        .filter(
-            m =>
-            m.odeme_durumu !== "Ödendi"
-        )
-        .reduce(
-            (a,m)=>
-                a + Number(m.tutar || 0),
-            0
-        );
+    document
+    .getElementById("toplamMusteri")
+    .textContent =
+        musteriler.length;
 
 
-    const odenen =
-        toplamTutar - bekleyen;
+    document
+    .getElementById("toplamIs")
+    .textContent =
+        musteriler.length;
 
 
-    document.getElementById(
-        "toplamMusteri"
-    ).textContent =
-        data?.length || 0;
-
-
-    document.getElementById(
-        "toplamM2"
-    ).textContent =
+    document
+    .getElementById("toplamM2")
+    .textContent =
         toplamM2.toLocaleString("tr-TR");
 
 
-    document.getElementById(
-        "toplamTutar"
-    ).textContent =
+    document
+    .getElementById("toplamTutar")
+    .textContent =
         toplamTutar.toLocaleString("tr-TR")
         + " TL";
 
 
-    document.getElementById(
-        "bekleyenOdeme"
-    ).textContent =
-        bekleyen.toLocaleString("tr-TR")
-        + " TL";
-
-
-    document.getElementById(
-        "kasaToplam"
-    ).textContent =
+    document
+    .getElementById("kasaToplam")
+    .textContent =
         toplamTutar.toLocaleString("tr-TR")
         + " TL";
 
 
-    document.getElementById(
-        "kasaOdenen"
-    ).textContent =
-        odenen.toLocaleString("tr-TR")
-        + " TL";
-
-
-    document.getElementById(
-        "kasaBekleyen"
-    ).textContent =
-        bekleyen.toLocaleString("tr-TR")
-        + " TL";
-
-
-    document.getElementById(
-        "kasaM2"
-    ).textContent =
+    document
+    .getElementById("kasaM2")
+    .textContent =
         toplamM2.toLocaleString("tr-TR");
 
 
     /* MÜŞTERİ LİSTESİ */
 
-    if(!liste.length){
+    if(!filtreli.length){
 
         document
         .getElementById("musteriListesi")
@@ -1355,53 +1208,43 @@ async function musterileriGetir(){
         document
         .getElementById("musteriListesi")
         .innerHTML =
-        liste.map(m => `
+
+        filtreli.map(function(m){
+
+            return `
 
             <div class="customer">
 
-                <div class="customer-top">
-
-                    <div>
-
-                        <div class="customer-name">
-                            ${guvenli(m.ad_soyad)}
-                        </div>
-
-                        <div class="customer-phone">
-                            📞 ${guvenli(m.telefon)}
-                        </div>
-
-                    </div>
-
-                    <div class="status">
-                        ${guvenli(
-                            m.odeme_durumu ||
-                            "Ödenmedi"
-                        )}
-                    </div>
-
+                <div class="customer-name">
+                    ${guvenli(m.ad_soyad)}
                 </div>
 
+                <div class="customer-phone">
+                    📞 ${guvenli(m.telefon || "-")}
+                </div>
 
                 <div class="customer-info">
 
                     📍 ${guvenli(m.adres || "-")}<br>
 
                     📅 Alım:
-                    ${guvenli(
-                        m.alim_tarihi || "-"
-                    )}<br>
+                    ${guvenli(m.alim_tarihi || "-")}<br>
 
                     🚚 Teslim:
-                    ${guvenli(
-                        m.teslim_tarihi || "-"
-                    )}<br>
+                    ${guvenli(m.teslim_tarihi || "-")}<br>
 
-                    🧼 ${m.hali_m2 ?? "-"} m²
-
+                    🧼 ${m.hali_m2 ?? 0} m²
                     &nbsp; • &nbsp;
+                    💰 ${m.tutar ?? 0} TL
 
-                    💰 ${m.tutar ?? "-"} TL
+                    ${
+                        m.notlar
+                        ?
+                        "<br>📝 " +
+                        guvenli(m.notlar)
+                        :
+                        ""
+                    }
 
                 </div>
 
@@ -1433,106 +1276,203 @@ async function musterileriGetir(){
 
             </div>
 
-        `).join("");
+            `;
+
+        }).join("");
 
     }
 
 
-    /* KASA LİSTESİ */
-
-    document.getElementById("kasaListe").innerHTML =
-        liste.length
-        ?
-        liste.slice(0,10).map(m => `
-
-            <div class="today-item">
-
-                <div class="today-main">
-
-                    <div class="today-name">
-                        ${guvenli(m.ad_soyad)}
-                    </div>
-
-                    <div class="today-detail">
-                        ${m.tutar ?? 0} TL
-                    </div>
-
-                </div>
-
-                <div class="status">
-                    ${guvenli(
-                        m.odeme_durumu ||
-                        "Ödenmedi"
-                    )}
-                </div>
-
-            </div>
-
-        `).join("")
-        :
-        '<div class="empty">Kayıt yok.</div>';
-
-
     /* İŞLER */
 
-    document.getElementById("islerListesi").innerHTML =
-        liste.length
+    const isArama =
+        (
+            document
+            .getElementById("isArama")
+            ?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const isler =
+        musteriler.filter(function(m){
+
+            if(!isArama){
+
+                return true;
+
+            }
+
+            return (
+                String(m.ad_soyad || "")
+                .toLowerCase()
+                .includes(isArama)
+                ||
+
+                String(m.telefon || "")
+                .toLowerCase()
+                .includes(isArama)
+            );
+
+        });
+
+
+    document
+    .getElementById("islerListesi")
+    .innerHTML =
+
+        isler.length
+
         ?
-        liste.map(m => `
 
-            <div class="today-item">
+        isler.map(function(m){
 
-                <div class="today-main">
+            return `
 
-                    <div class="today-name">
-                        ${guvenli(m.ad_soyad)}
-                    </div>
+            <div class="customer">
 
-                    <div class="today-detail">
-
-                        📅
-                        ${guvenli(
-                            m.alim_tarihi || "-"
-                        )}
-
-                        →
-
-                        ${guvenli(
-                            m.teslim_tarihi || "-"
-                        )}
-
-                        •
-
-                        ${m.hali_m2 ?? 0} m²
-
-                    </div>
-
+                <div class="customer-name">
+                    ${guvenli(m.ad_soyad)}
                 </div>
 
-                <div class="status">
-                    ${guvenli(
-                        m.odeme_durumu ||
-                        "Ödenmedi"
-                    )}
+                <div class="customer-info">
+
+                    📅 Alım:
+                    ${guvenli(m.alim_tarihi || "-")}
+
+                    <br>
+
+                    🚚 Teslim:
+                    ${guvenli(m.teslim_tarihi || "-")}
+
+                    <br>
+
+                    🧼 ${m.hali_m2 ?? 0} m²
+
+                    &nbsp; • &nbsp;
+
+                    💰 ${m.tutar ?? 0} TL
+
                 </div>
 
             </div>
 
-        `).join("")
+            `;
+
+        }).join("")
+
         :
+
         '<div class="empty">İş bulunamadı.</div>';
 
+
+    /* KASA */
+
+    document
+    .getElementById("kasaListe")
+    .innerHTML =
+
+        musteriler.length
+
+        ?
+
+        musteriler.slice(0,10)
+        .map(function(m){
+
+            return `
+
+            <div class="customer">
+
+                <div class="customer-name">
+                    ${guvenli(m.ad_soyad)}
+                </div>
+
+                <div class="customer-info">
+                    💰 ${m.tutar ?? 0} TL
+                    <br>
+                    🧼 ${m.hali_m2 ?? 0} m²
+                </div>
+
+            </div>
+
+            `;
+
+        }).join("")
+
+        :
+
+        '<div class="empty">Henüz kayıt yok.</div>';
+
+
+    /* YAKLAŞAN TESLİMLER */
+
+    const teslimler =
+        musteriler
+        .filter(function(m){
+
+            return m.teslim_tarihi;
+
+        })
+        .sort(function(a,b){
+
+            return String(a.teslim_tarihi)
+            .localeCompare(
+                String(b.teslim_tarihi)
+            );
+
+        })
+        .slice(0,5);
+
+
+    document
+    .getElementById("yaklasanIsler")
+    .innerHTML =
+
+        teslimler.length
+
+        ?
+
+        teslimler.map(function(m){
+
+            return `
+
+            <div class="customer">
+
+                <div class="customer-name">
+                    ${guvenli(m.ad_soyad)}
+                </div>
+
+                <div class="customer-info">
+                    🚚 Teslim:
+                    ${guvenli(m.teslim_tarihi)}
+                    <br>
+                    💰 ${m.tutar ?? 0} TL
+                </div>
+
+            </div>
+
+            `;
+
+        }).join("")
+
+        :
+
+        '<div class="empty">' +
+        'Yaklaşan teslimat yok.' +
+        '</div>';
 
 }
 
 
-/* ================= TELEFON ================= */
+/* TELEFON */
 
 function telefonJS(text){
 
     return String(text || "")
-        .replace(/\\/g,"\\\\")
-        .replace(/'/g,"\\'");
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
 }
 
 
@@ -1542,7 +1482,15 @@ function ara(telefon){
         String(telefon)
         .replace(/\D/g,"");
 
-    window.location.href =
+    if(!temiz){
+
+        alert("Telefon numarası bulunamadı.");
+
+        return;
+
+    }
+
+    location.href =
         "tel:" + temiz;
 
 }
@@ -1554,9 +1502,8 @@ function whatsapp(telefon){
         String(telefon)
         .replace(/\D/g,"");
 
-    if(
-        temiz.startsWith("0")
-    ){
+
+    if(temiz.startsWith("0")){
 
         temiz =
             "90" +
@@ -1564,14 +1511,14 @@ function whatsapp(telefon){
 
     }
 
-    if(
-        !temiz.startsWith("90")
-    ){
+
+    if(!temiz.startsWith("90")){
 
         temiz =
             "90" + temiz;
 
     }
+
 
     window.open(
         "https://wa.me/" +
@@ -1582,15 +1529,13 @@ function whatsapp(telefon){
 }
 
 
-/* ================= SİL ================= */
+/* SİL */
 
 async function musteriSil(id){
 
-    if(
-        !confirm(
-            "Bu müşteriyi silmek istediğine emin misin?"
-        )
-    ){
+    if(!confirm(
+        "Bu müşteriyi silmek istediğine emin misin?"
+    )){
 
         return;
 
@@ -1621,7 +1566,7 @@ async function musteriSil(id){
 }
 
 
-/* ================= BUGÜN ================= */
+/* TARİH */
 
 function bugunGoster(){
 
@@ -1644,26 +1589,7 @@ function bugunGoster(){
 }
 
 
-/* ================= OTURUM ================= */
-
-/*
-   Buraya mevcut giriş/oturum kodunu
-   daha sonra birlikte bağlayacağız.
-*/
-
-async function oturumKontrol(){
-
-    const {data} =
-        await client.auth.getSession();
-
-    if(data.session){
-
-        await uygulamayiAc();
-
-    }
-
-}
-
+/* OTURUM */
 
 async function uygulamayiAc(){
 
@@ -1678,6 +1604,21 @@ async function uygulamayiAc(){
 }
 
 
+async function oturumKontrol(){
+
+    const {data} =
+        await client.auth.getSession();
+
+
+    if(data.session){
+
+        await uygulamayiAc();
+
+    }
+
+}
+
+
 async function logout(){
 
     await client.auth.signOut();
@@ -1687,7 +1628,7 @@ async function logout(){
 }
 
 
-/* ================= BAŞLAT ================= */
+/* BAŞLAT */
 
 bugunGoster();
 
@@ -1697,3 +1638,4 @@ oturumKontrol();
 
 </body>
 </html>
+```
